@@ -3,396 +3,299 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>EMON TOPUP | Premium Game Top-Up</title>
+  <title>EMON BaZaR | Premium Game Top-Up</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root {
-      --bg-dark: #0b0f19;
-      --bg-card: #151c2c;
-      --bg-hover: #1e293b;
-      --primary: #00ff88;    /* Neon Green */
-      --secondary: #00e5ff;  /* Cyan */
-      --accent: #ff007a;     /* Cyber Pink */
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.08);
+      --primary: #2d9472; /* The exact green color from the screenshot */
+      --bg-main: #f4f6f9;
+      --text-dark: #1a1a1a;
+      --text-muted: #666;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-
-    body { background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; }
+    body { background-color: var(--bg-main); color: var(--text-dark); overflow-x: hidden; }
 
     /* ================= HEADER ================= */
     header {
-      background: rgba(11, 15, 25, 0.95); backdrop-filter: blur(10px);
-      position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border);
-      padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+      background: #fff; padding: 12px 5%; display: flex; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000;
     }
-    .logo { font-size: 1.6rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-    .logo span { color: var(--primary); text-shadow: 0 0 10px rgba(0, 255, 136, 0.4); }
-    .logo i { color: var(--accent); }
-
-    .nav-right { display: flex; gap: 15px; align-items: center; }
-    .wallet { background: var(--bg-card); border: 1px solid var(--border); padding: 8px 15px; border-radius: 30px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; color: var(--primary); }
-    .profile-btn { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(45deg, var(--accent), var(--secondary)); display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 1.2rem; color: #fff; border: none; }
-
-    /* ================= BANNER ================= */
-    .hero-banner {
-      margin: 20px 5%; height: 250px; border-radius: 16px; position: relative; overflow: hidden;
-      background: linear-gradient(90deg, rgba(11,15,25,0.95) 0%, rgba(11,15,25,0.4) 100%), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070') center/cover;
-      display: flex; flex-direction: column; justify-content: center; padding: 30px;
-      border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-    .hero-banner h1 { font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 10px; line-height: 1.2; text-transform: uppercase; }
-    .hero-banner h1 span { color: var(--secondary); text-shadow: 0 0 15px rgba(0, 229, 255, 0.5); }
-    .hero-banner p { color: #cbd5e1; font-size: 0.95rem; max-width: 450px; margin-bottom: 15px; }
-
-    /* ================= GAME GRID ================= */
-    .section-title { padding: 30px 5% 15px; display: flex; align-items: center; gap: 10px; font-size: 1.4rem; font-weight: 700; text-transform: uppercase; }
-    .section-title i { color: var(--accent); }
-
-    .game-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 20px; padding: 0 5% 40px;
-    }
-    .game-card {
-      background: var(--bg-card); border-radius: 16px; padding: 15px; text-align: center;
-      border: 1px solid var(--border); cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
-    }
-    .game-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 25px rgba(0, 255, 136, 0.15); }
+    .logo { display: flex; align-items: center; gap: 8px; font-size: 1.5rem; font-weight: 800; color: #111; }
+    .logo span { color: var(--primary); }
+    .logo i { font-size: 2rem; color: var(--primary); }
     
-    .game-img { width: 100px; height: 100px; border-radius: 20px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s; }
-    .game-card:hover .game-img { transform: scale(1.1); }
+    .profile-nav { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .profile-nav img { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; }
+    .profile-nav span { font-size: 0.85rem; font-weight: 600; color: #333; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ================= HERO SLIDER ================= */
+    .slider-container {
+      margin: 15px auto; width: 95%; max-width: 800px; position: relative; border-radius: 12px; overflow: hidden;
+    }
+    .slider-container img { width: 100%; height: auto; display: block; border-radius: 12px; }
+    .slider-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9);
+      width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+      cursor: pointer; font-size: 1.2rem; color: var(--primary); border: none; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .slider-arrow.left { left: 10px; }
+    .slider-arrow.right { right: 10px; }
+
+    /* ================= SECTION TITLE ================= */
+    .section-title { text-align: center; font-size: 1.5rem; font-weight: 700; margin: 30px 0 20px; color: #222; }
+    .section-title span { color: var(--primary); }
+
+    /* ================= PRODUCT GRID ================= */
+    .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 15px 30px; max-width: 800px; margin: 0 auto; }
+    @media(min-width: 768px){ .product-grid { grid-template-columns: repeat(4, 1fr); } }
+
+    .product-card {
+      background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      border: 1px solid #eaeaea; text-align: center; cursor: pointer; transition: 0.3s;
+    }
+    .product-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+    .product-img { width: 100%; aspect-ratio: 1; object-fit: cover; border-bottom: 1px solid #eaeaea; }
+    .product-title { padding: 12px 8px; font-size: 0.9rem; font-weight: 700; color: #333; }
+
+    /* ================= DOWNLOAD APP ================= */
+    .download-section { text-align: center; margin: 30px 0; padding: 20px; }
+    .download-section h3 { font-size: 1.2rem; margin-bottom: 15px; text-transform: uppercase; }
+    .download-section img { width: 180px; cursor: pointer; }
+
+    /* ================= FOOTER ================= */
+    footer { background: var(--primary); color: #fff; padding: 40px 20px 20px; text-align: center; }
     
-    .game-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 5px; }
-    .game-subtitle { font-size: 0.8rem; color: var(--text-muted); }
+    .contact-btns { display: flex; flex-direction: column; gap: 15px; max-width: 350px; margin: 0 auto 40px; }
+    .contact-btn {
+      display: flex; align-items: center; gap: 15px; background: transparent; border: 1px solid rgba(255,255,255,0.5);
+      padding: 12px 20px; border-radius: 30px; color: #fff; font-size: 1.1rem; font-weight: 600; text-decoration: none;
+    }
+    .contact-btn i { font-size: 1.5rem; }
+    
+    .footer-links h4 { font-size: 1.1rem; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; font-weight: 500; }
+    .footer-links ul { list-style: none; margin-bottom: 40px; }
+    .footer-links ul li { margin-bottom: 12px; }
+    .footer-links ul li a { color: rgba(255,255,255,0.9); text-decoration: none; font-size: 0.95rem; }
 
-    .flash-badge { position: absolute; top: 10px; right: -25px; background: var(--accent); color: #fff; font-size: 0.65rem; font-weight: bold; padding: 4px 30px; transform: rotate(45deg); text-transform: uppercase; }
+    .social-links { display: flex; justify-content: center; gap: 15px; margin: 20px 0; }
+    .social-links a {
+      width: 40px; height: 40px; background: rgba(255,255,255,0.3); border-radius: 50%;
+      display: flex; justify-content: center; align-items: center; color: #fff; font-size: 1.2rem; text-decoration: none;
+    }
 
-    /* ================= TOP-UP MODAL ================= */
+    .payment-methods { background: #fff; padding: 5px; border-radius: 5px; display: inline-block; margin-bottom: 20px; }
+    .payment-methods img { height: 20px; }
+
+    .copyright { font-size: 0.85rem; color: rgba(255,255,255,0.8); border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; }
+
+    /* ================= ORDER MODAL ================= */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
-      z-index: 3000; display: none; justify-content: center; align-items: flex-end; /* Bottom sheet on mobile */
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000;
+      display: none; justify-content: center; align-items: center; padding: 20px;
     }
-    @media (min-width: 768px) { .modal-overlay { align-items: center; padding: 20px; } }
-
-    .topup-box {
-      background: var(--bg-card); width: 100%; max-width: 600px; padding: 25px;
-      border-radius: 20px 20px 0 0; border: 1px solid var(--border); border-bottom: none;
-      max-height: 90vh; overflow-y: auto; position: relative;
-      animation: slideUp 0.3s ease-out forwards;
+    .modal-box { background: #fff; width: 100%; max-width: 450px; border-radius: 12px; padding: 25px; position: relative; }
+    .close-modal { position: absolute; top: 15px; right: 15px; border: none; background: transparent; font-size: 1.5rem; cursor: pointer; color: #666; }
+    
+    .modal-box h3 { margin-bottom: 20px; color: var(--primary); text-align: center; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 5px; }
+    .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; outline: none; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
+    
+    .whatsapp-btn {
+      width: 100%; padding: 15px; background: #25D366; color: #fff; border: none; border-radius: 8px;
+      font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 20px;
     }
-    @media (min-width: 768px) { .topup-box { border-radius: 16px; border-bottom: 1px solid var(--border); animation: popIn 0.3s ease-out forwards; } }
-
-    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-    .close-modal { position: absolute; top: 15px; right: 15px; background: var(--bg-hover); width: 32px; height: 32px; border-radius: 50%; border: none; color: #fff; font-size: 1rem; cursor: pointer; transition: 0.2s; }
-    .close-modal:hover { background: #ff334b; }
-
-    .modal-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
-    .modal-game-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; }
-    .modal-game-title { font-size: 1.3rem; font-weight: 700; color: #fff; }
-
-    /* Step System */
-    .step-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-    .step-title { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 600; color: var(--secondary); margin-bottom: 15px; }
-    .step-badge { background: var(--secondary); color: #000; width: 24px; height: 24px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 0.9rem; font-weight: bold; }
-
-    /* Player ID Input */
-    .input-group input { width: 100%; padding: 12px 15px; background: var(--bg-dark); border: 1px solid var(--border); color: #fff; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; font-family: monospace; letter-spacing: 1px; }
-    .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0,255,136,0.2); }
-
-    /* Packages Grid */
-    .pkg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
-    .pkg-card { background: var(--bg-dark); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; }
-    .pkg-card.active { border-color: var(--primary); background: rgba(0,255,136,0.1); }
-    .pkg-amt { font-size: 1.1rem; font-weight: 700; color: #fff; display: flex; justify-content: center; align-items: center; gap: 5px; }
-    .pkg-price { font-size: 0.9rem; color: var(--primary); margin-top: 5px; font-weight: 600; }
-
-    /* Payment Methods */
-    .pay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-    .pay-card { background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
-    .pay-card.active { border-color: var(--secondary); background: rgba(0,229,255,0.1); color: var(--secondary); }
-    .pay-card img { width: auto; height: 25px; margin-bottom: 5px; display: block; margin: 0 auto 5px; }
-
-    /* Checkout Button */
-    .checkout-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
-    .total-price { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
-    .buy-btn { background: linear-gradient(45deg, var(--primary), #00b35f); color: #000; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,255,136,0.3); }
-    .buy-btn:hover { transform: scale(1.05); }
-
-    /* FOOTER */
-    footer { background: #080b12; padding: 30px 5%; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; color: var(--text-muted); font-size: 0.85rem; }
   </style>
 </head>
 <body>
 
   <!-- HEADER -->
   <header>
-    <div class="logo"><i class="fa-solid fa-gamepad"></i> EMON <span>TOPUP</span></div>
-    <div class="nav-right">
-      <div class="wallet"><i class="fa-solid fa-wallet"></i> ৳ 0.00</div>
-      <button class="profile-btn"><i class="fa-regular fa-user"></i></button>
+    <div class="logo">
+      <i class="fa-solid fa-gamepad"></i> EMON <span>BaZaR</span>
+    </div>
+    <div class="profile-nav">
+      <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="Profile">
+      <span>Emon12345678khanemon</span> <i class="fa-solid fa-angle-down" style="font-size:0.8rem;"></i>
     </div>
   </header>
 
-  <!-- BANNER -->
-  <div class="hero-banner">
-    <h1>Instant Top-Up<br><span>Anywhere, Anytime.</span></h1>
-    <p>Bangladesh's most trusted gaming top-up platform by Emon Khan. Fast, secure, and instant delivery via Player ID.</p>
+  <!-- HERO SLIDER -->
+  <div class="slider-container">
+    <button class="slider-arrow left"><i class="fa-solid fa-chevron-left"></i></button>
+    <!-- Placeholder for the Banner Image -->
+    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800" alt="Offer Banner" style="height: 180px;">
+    <button class="slider-arrow right"><i class="fa-solid fa-chevron-right"></i></button>
   </div>
 
-  <!-- GAME CATEGORIES -->
-  <div class="section-title"><i class="fa-solid fa-fire"></i> Trending Games</div>
-  
-  <div class="game-grid" id="gameGrid">
-    <!-- Rendered by JS -->
+  <!-- SECTION TITLE -->
+  <div class="section-title">New Game <span>Top-Up</span></div>
+
+  <!-- PRODUCT GRID -->
+  <div class="product-grid" id="productGrid">
+    <!-- Products rendered via JS matching the screenshots -->
   </div>
 
-  <!-- TOP-UP MODAL -->
-  <div class="modal-overlay" id="topupModal">
-    <div class="topup-box">
-      <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+  <!-- DOWNLOAD APP -->
+  <div class="download-section">
+    <h3>DOWNLOAD OUR MOBILE APP</h3>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="contact-btns">
+      <a href="tel:+8801728576508" class="contact-btn">
+        <i class="fa-solid fa-phone"></i> +8801728576508
+      </a>
+      <a href="https://wa.me/8801728576508" class="contact-btn" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> +8801728576508 <span style="font-size:0.7rem; margin-left:auto;">9AM - 10PM</span>
+      </a>
+    </div>
+
+    <div class="footer-links">
+      <h4>ABOUT</h4>
+      <ul>
+        <li><a href="#">Terms & condition</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Shipment Info</a></li>
+        <li><a href="#">Refund and Return Policy</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">About us</a></li>
+        <br>
+        <li><a href="#">Free Fire</a></li>
+        <li><a href="#">Pubg Mobile</a></li>
+        <li><a href="#">Call of Duty</a></li>
+        <li><a href="#">Clash of clan</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-links" style="margin-top: 40px;">
+      <h4>STAY CONNECTED</h4>
+      <p style="margin-bottom: 20px;">Emon Bazar<br>Email: emonbazar@gmail.com</p>
       
-      <div class="modal-header">
-        <img src="" id="modalImg" class="modal-game-img">
-        <div>
-          <div class="modal-game-title" id="modalTitle">Game Name</div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Instant Delivery via Player ID</div>
-        </div>
+      <div class="social-links">
+        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#"><i class="fa-brands fa-youtube"></i></a>
+        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+
+    <div class="payment-methods">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1024px-Visa_Inc._logo.svg.png" alt="Visa">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1024px-Mastercard-logo.svg.png" alt="Mastercard">
+      <span style="color:#000; font-weight:bold; font-size:0.8rem; margin-left:10px;">bKash | Nagad | Rocket</span>
+    </div>
+
+    <div class="copyright">
+      &copy; Copyright 2026. All Rights Reserved.<br>Developed by Emon Bazar
+    </div>
+  </footer>
+
+  <!-- WHATSAPP ORDER MODAL -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal-box">
+      <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      <h3 id="modalTitle">Order Top-Up</h3>
+      
+      <div class="form-group">
+        <label>Player ID / UID</label>
+        <input type="text" id="playerId" placeholder="Example: 123456789">
       </div>
 
-      <!-- STEP 1: Player ID -->
-      <div class="step-box">
-        <div class="step-title"><span class="step-badge">1</span> Enter Player Info</div>
-        <div class="input-group">
-          <input type="text" id="playerId" placeholder="Enter Player ID / UID">
-        </div>
+      <div class="form-group">
+        <label>Select Package</label>
+        <select id="packageSelect">
+          <option value="115 Diamonds - 75 TK">115 Diamonds - 75 TK</option>
+          <option value="240 Diamonds - 150 TK">240 Diamonds - 150 TK</option>
+          <option value="Weekly Pass - 160 TK">Weekly Pass - 160 TK</option>
+          <option value="Monthly Pass - 750 TK">Monthly Pass - 750 TK</option>
+        </select>
       </div>
 
-      <!-- STEP 2: Select Package -->
-      <div class="step-box">
-        <div class="step-title"><span class="step-badge">2</span> Select Package</div>
-        <div class="pkg-grid" id="pkgGrid">
-          <!-- Packages go here -->
-        </div>
+      <div class="form-group">
+        <label>Your WhatsApp Number</label>
+        <input type="text" id="userPhone" placeholder="017XXXXXXXX">
       </div>
 
-      <!-- STEP 3: Payment Method -->
-      <div class="step-box">
-        <div class="step-title"><span class="step-badge">3</span> Payment Method</div>
-        <div class="pay-grid">
-          <div class="pay-card active" onclick="selectPay(this)">
-            <i class="fa-solid fa-building-columns" style="font-size:1.5rem; margin-bottom:5px; color:#e2136e;"></i><br>bKash
-          </div>
-          <div class="pay-card" onclick="selectPay(this)">
-            <i class="fa-solid fa-mobile-screen" style="font-size:1.5rem; margin-bottom:5px; color:#f58220;"></i><br>Nagad
-          </div>
-          <div class="pay-card" onclick="selectPay(this)">
-            <i class="fa-solid fa-rocket" style="font-size:1.5rem; margin-bottom:5px; color:#8c1560;"></i><br>Rocket
-          </div>
-        </div>
-      </div>
-
-      <!-- Footer Checkout -->
-      <div class="checkout-footer">
-        <div>
-          <div style="font-size:0.8rem; color:var(--text-muted);">Total Payable</div>
-          <div class="total-price" id="totalPrice">৳ 0</div>
-        </div>
-        <button class="buy-btn" onclick="confirmTopUp()">Buy Now</button>
-      </div>
-
+      <button class="whatsapp-btn" onclick="sendToWhatsApp()">
+        <i class="fa-brands fa-whatsapp"></i> Order Via WhatsApp
+      </button>
+      <p style="text-align:center; font-size:0.8rem; color:#666; margin-top:10px;">
+        অর্ডার প্লেস করলে সরাসরি আমাদের অ্যাডমিনের হোয়াটসঅ্যাপে চলে যাবে।
+      </p>
     </div>
   </div>
 
-  <footer>
-    &copy; 2026 EMON TOPUP | Developed by Emon Khan. All Rights Reserved.
-  </footer>
-
   <script>
     // ==========================================
-    // GAME DATABASE & PACKAGES
+    // PRODUCT DATA (Matching Screenshots)
     // ==========================================
-    const games = [
-      {
-        id: "ff",
-        name: "Free Fire",
-        currency: "Diamonds",
-        icon: "💎",
-        flash: "Hot",
-        img: "https://images.unsplash.com/photo-1620283085439-3f71c4c11438?w=300", 
-        packages: [
-          { amt: 115, price: 75 },
-          { amt: 240, price: 150 },
-          { amt: 355, price: 225 },
-          { amt: 610, price: 390 },
-          { amt: 1240, price: 780 },
-          { amt: 2530, price: 1550 },
-          { amt: "Weekly", price: 160 },
-          { amt: "Monthly", price: 750 }
-        ]
-      },
-      {
-        id: "pubg",
-        name: "PUBG Mobile",
-        currency: "UC",
-        icon: "🪙",
-        flash: "Sale",
-        img: "https://images.unsplash.com/photo-1601053153549-b63351ec12cb?w=300",
-        packages: [
-          { amt: 60, price: 85 },
-          { amt: 325, price: 400 },
-          { amt: 660, price: 800 },
-          { amt: 1800, price: 2050 },
-          { amt: 3850, price: 4000 }
-        ]
-      },
-      {
-        id: "mlbb",
-        name: "Mobile Legends",
-        currency: "Diamonds",
-        icon: "💠",
-        flash: "",
-        img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300",
-        packages: [
-          { amt: 86, price: 140 },
-          { amt: 172, price: 280 },
-          { amt: 257, price: 420 },
-          { amt: 706, price: 1150 }
-        ]
-      },
-      {
-        id: "valorant",
-        name: "Valorant",
-        currency: "VP",
-        icon: "V",
-        flash: "",
-        img: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=300",
-        packages: [
-          { amt: 475, price: 550 },
-          { amt: 1000, price: 1100 },
-          { amt: 2050, price: 2200 }
-        ]
-      },
-      {
-        id: "codm",
-        name: "Call of Duty",
-        currency: "CP",
-        icon: "🎖️",
-        flash: "",
-        img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=300",
-        packages: [
-          { amt: 80, price: 85 },
-          { amt: 420, price: 420 },
-          { amt: 880, price: 850 }
-        ]
-      },
-      {
-        id: "roblox",
-        name: "Roblox",
-        currency: "Robux",
-        icon: "R$",
-        flash: "",
-        img: "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=300",
-        packages: [
-          { amt: 400, price: 650 },
-          { amt: 800, price: 1250 },
-          { amt: 1700, price: 2500 }
-        ]
-      }
+    const products = [
+      { name: "Free Fire (ID CODE)", img: "https://images.unsplash.com/photo-1620283085439-3f71c4c11438?w=300" },
+      { name: "Free Fire - 200 Like প্রতিদিন", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300" },
+      { name: "FF UNIPIN VOUCHER", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=300" },
+      { name: "Evo Access (ID CODE)", img: "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=300" },
+      { name: "New Level Up Pass", img: "https://images.unsplash.com/photo-1601053153549-b63351ec12cb?w=300" },
+      { name: "PUBG UC VOUCHER", img: "https://images.unsplash.com/photo-1589003077984-894e133dabab?w=300" },
+      { name: "PUBG MOBILE UC", img: "https://images.unsplash.com/photo-1579829366248-204fe8413f31?w=300" },
+      { name: "Google AI Pro", img: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=300" },
+      { name: "YouTube Premium", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Youtube_Premium_Logo.svg/1024px-Youtube_Premium_Logo.svg.png" },
+      { name: "Chat GPT", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" }
     ];
 
-    // Render Games
-    const gameGrid = document.getElementById('gameGrid');
-    games.forEach(g => {
-      let flashHtml = g.flash ? `<div class="flash-badge">${g.flash}</div>` : '';
-      gameGrid.innerHTML += `
-        <div class="game-card" onclick="openModal('${g.id}')">
-          ${flashHtml}
-          <img src="${g.img}" alt="${g.name}" class="game-img">
-          <div class="game-title">${g.name}</div>
-          <div class="game-subtitle">Top-Up ${g.currency}</div>
+    const productGrid = document.getElementById('productGrid');
+    
+    products.forEach(p => {
+      productGrid.innerHTML += `
+        <div class="product-card" onclick="openModal('${p.name}')">
+          <img src="${p.img}" class="product-img" alt="${p.name}">
+          <div class="product-title">${p.name}</div>
         </div>
       `;
     });
 
     // ==========================================
-    // MODAL LOGIC
+    // WHATSAPP ORDER LOGIC (ভাইয়ের সাথে কানেক্ট)
     // ==========================================
-    let currentPrice = 0;
-    let selectedPackageText = "";
+    // এখানে আপনার বা আপনার ভাইয়ের আসল হোয়াটসঅ্যাপ নাম্বার দিন (কান্ট্রি কোড সহ)
+    const ADMIN_WHATSAPP = "8801728576508"; 
+    
+    let selectedGame = "";
 
-    function openModal(id) {
-      const game = games.find(g => g.id === id);
-      
-      document.getElementById('modalImg').src = game.img;
-      document.getElementById('modalTitle').innerText = game.name;
-      document.getElementById('playerId').value = '';
-      
-      // Render Packages
-      const pkgGrid = document.getElementById('pkgGrid');
-      pkgGrid.innerHTML = '';
-      currentPrice = 0;
-      selectedPackageText = "";
-      document.getElementById('totalPrice').innerText = `৳ 0`;
-
-      game.packages.forEach((pkg, index) => {
-        let isString = typeof pkg.amt === 'string';
-        let amtDisplay = isString ? pkg.amt : `${pkg.amt} ${game.icon}`;
-        let subText = isString ? `${game.currency}` : `${game.currency}`;
-
-        pkgGrid.innerHTML += `
-          <div class="pkg-card" onclick="selectPkg(this, ${pkg.price}, '${amtDisplay}')">
-            <div class="pkg-amt">${amtDisplay}</div>
-            <div style="font-size:0.7rem; color:var(--text-muted);">${subText}</div>
-            <div class="pkg-price">৳ ${pkg.price}</div>
-          </div>
-        `;
-      });
-
-      document.getElementById('topupModal').style.display = 'flex';
+    function openModal(gameName) {
+      selectedGame = gameName;
+      document.getElementById('modalTitle').innerText = "Order: " + gameName;
+      document.getElementById('orderModal').style.display = 'flex';
     }
 
     function closeModal() {
-      document.getElementById('topupModal').style.display = 'none';
+      document.getElementById('orderModal').style.display = 'none';
     }
 
-    function selectPkg(elem, price, pkgName) {
-      document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active'));
-      elem.classList.add('active');
-      currentPrice = price;
-      selectedPackageText = pkgName;
-      document.getElementById('totalPrice').innerText = `৳ ${price}`;
-    }
+    function sendToWhatsApp() {
+      const playerId = document.getElementById('playerId').value;
+      const package = document.getElementById('packageSelect').value;
+      const phone = document.getElementById('userPhone').value;
 
-    function selectPay(elem) {
-      document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('active'));
-      elem.classList.add('active');
-    }
-
-    function confirmTopUp() {
-      const playerId = document.getElementById('playerId').value.trim();
-      
-      if(!playerId) return alert("Please enter your Player ID / UID first!");
-      if(currentPrice === 0) return alert("Please select a Top-Up package!");
-
-      const activePay = document.querySelector('.pay-card.active').innerText.trim();
-
-      alert(`✅ Order Created Successfully!\n\nID: ${playerId}\nPackage: ${selectedPackageText}\nAmount: ৳ ${currentPrice}\nMethod: ${activePay}\n\nThanks for choosing EMON TOPUP!`);
-      closeModal();
-    }
-
-    // Close on overlay click
-    window.onclick = function(event) {
-      const modal = document.getElementById('topupModal');
-      if (event.target == modal) {
-        closeModal();
+      if(!playerId || !phone) {
+        alert("দয়া করে প্লেয়ার আইডি এবং আপনার নাম্বারটি দিন!");
+        return;
       }
+
+      // মেসেজ তৈরি
+      const message = `হ্যালো EMON BaZaR,\nআমি একটি টপ-আপ নিতে চাই:\n\n🎮 গেম: ${selectedGame}\n🆔 প্লেয়ার আইডি: ${playerId}\n💎 প্যাকেজ: ${package}\n📞 আমার নাম্বার: ${phone}\n\nদয়া করে আমাকে পেমেন্ট নাম্বার দিন।`;
+
+      // হোয়াটসঅ্যাপে পাঠানো
+      const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+      
+      closeModal();
     }
   </script>
 </body>
