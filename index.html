@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>EMON TOPUP | Premium Game Top-Up</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-card: #151c2c;
+      --bg-hover: #1e293b;
+      --primary: #00ff88;    /* Neon Green */
+      --secondary: #00e5ff;  /* Cyan */
+      --accent: #ff007a;     /* Cyber Pink */
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body { background-color: var(--bg-dark); color: var(--text-main); overflow-x: hidden; }
+
+    /* ================= HEADER ================= */
+    header {
+      background: rgba(11, 15, 25, 0.95); backdrop-filter: blur(10px);
+      position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border);
+      padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { font-size: 1.6rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+    .logo span { color: var(--primary); text-shadow: 0 0 10px rgba(0, 255, 136, 0.4); }
+    .logo i { color: var(--accent); }
+
+    .nav-right { display: flex; gap: 15px; align-items: center; }
+    .wallet { background: var(--bg-card); border: 1px solid var(--border); padding: 8px 15px; border-radius: 30px; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; color: var(--primary); }
+    .profile-btn { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(45deg, var(--accent), var(--secondary)); display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 1.2rem; color: #fff; border: none; }
+
+    /* ================= BANNER ================= */
+    .hero-banner {
+      margin: 20px 5%; height: 250px; border-radius: 16px; position: relative; overflow: hidden;
+      background: linear-gradient(90deg, rgba(11,15,25,0.95) 0%, rgba(11,15,25,0.4) 100%), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070') center/cover;
+      display: flex; flex-direction: column; justify-content: center; padding: 30px;
+      border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .hero-banner h1 { font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 10px; line-height: 1.2; text-transform: uppercase; }
+    .hero-banner h1 span { color: var(--secondary); text-shadow: 0 0 15px rgba(0, 229, 255, 0.5); }
+    .hero-banner p { color: #cbd5e1; font-size: 0.95rem; max-width: 450px; margin-bottom: 15px; }
+
+    /* ================= GAME GRID ================= */
+    .section-title { padding: 30px 5% 15px; display: flex; align-items: center; gap: 10px; font-size: 1.4rem; font-weight: 700; text-transform: uppercase; }
+    .section-title i { color: var(--accent); }
+
+    .game-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px; padding: 0 5% 40px;
+    }
+    .game-card {
+      background: var(--bg-card); border-radius: 16px; padding: 15px; text-align: center;
+      border: 1px solid var(--border); cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
+    }
+    .game-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 25px rgba(0, 255, 136, 0.15); }
+    
+    .game-img { width: 100px; height: 100px; border-radius: 20px; object-fit: cover; margin-bottom: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); transition: 0.3s; }
+    .game-card:hover .game-img { transform: scale(1.1); }
+    
+    .game-title { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 5px; }
+    .game-subtitle { font-size: 0.8rem; color: var(--text-muted); }
+
+    .flash-badge { position: absolute; top: 10px; right: -25px; background: var(--accent); color: #fff; font-size: 0.65rem; font-weight: bold; padding: 4px 30px; transform: rotate(45deg); text-transform: uppercase; }
+
+    /* ================= TOP-UP MODAL ================= */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+      z-index: 3000; display: none; justify-content: center; align-items: flex-end; /* Bottom sheet on mobile */
+    }
+    @media (min-width: 768px) { .modal-overlay { align-items: center; padding: 20px; } }
+
+    .topup-box {
+      background: var(--bg-card); width: 100%; max-width: 600px; padding: 25px;
+      border-radius: 20px 20px 0 0; border: 1px solid var(--border); border-bottom: none;
+      max-height: 90vh; overflow-y: auto; position: relative;
+      animation: slideUp 0.3s ease-out forwards;
+    }
+    @media (min-width: 768px) { .topup-box { border-radius: 16px; border-bottom: 1px solid var(--border); animation: popIn 0.3s ease-out forwards; } }
+
+    @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+    @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .close-modal { position: absolute; top: 15px; right: 15px; background: var(--bg-hover); width: 32px; height: 32px; border-radius: 50%; border: none; color: #fff; font-size: 1rem; cursor: pointer; transition: 0.2s; }
+    .close-modal:hover { background: #ff334b; }
+
+    .modal-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+    .modal-game-img { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; }
+    .modal-game-title { font-size: 1.3rem; font-weight: 700; color: #fff; }
+
+    /* Step System */
+    .step-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .step-title { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: 600; color: var(--secondary); margin-bottom: 15px; }
+    .step-badge { background: var(--secondary); color: #000; width: 24px; height: 24px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 0.9rem; font-weight: bold; }
+
+    /* Player ID Input */
+    .input-group input { width: 100%; padding: 12px 15px; background: var(--bg-dark); border: 1px solid var(--border); color: #fff; border-radius: 8px; font-size: 1rem; outline: none; transition: 0.3s; font-family: monospace; letter-spacing: 1px; }
+    .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0,255,136,0.2); }
+
+    /* Packages Grid */
+    .pkg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+    .pkg-card { background: var(--bg-dark); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; transition: 0.2s; }
+    .pkg-card.active { border-color: var(--primary); background: rgba(0,255,136,0.1); }
+    .pkg-amt { font-size: 1.1rem; font-weight: 700; color: #fff; display: flex; justify-content: center; align-items: center; gap: 5px; }
+    .pkg-price { font-size: 0.9rem; color: var(--primary); margin-top: 5px; font-weight: 600; }
+
+    /* Payment Methods */
+    .pay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .pay-card { background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
+    .pay-card.active { border-color: var(--secondary); background: rgba(0,229,255,0.1); color: var(--secondary); }
+    .pay-card img { width: auto; height: 25px; margin-bottom: 5px; display: block; margin: 0 auto 5px; }
+
+    /* Checkout Button */
+    .checkout-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .total-price { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+    .buy-btn { background: linear-gradient(45deg, var(--primary), #00b35f); color: #000; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,255,136,0.3); }
+    .buy-btn:hover { transform: scale(1.05); }
+
+    /* FOOTER */
+    footer { background: #080b12; padding: 30px 5%; text-align: center; border-top: 1px solid var(--border); margin-top: 40px; color: var(--text-muted); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo"><i class="fa-solid fa-gamepad"></i> EMON <span>TOPUP</span></div>
+    <div class="nav-right">
+      <div class="wallet"><i class="fa-solid fa-wallet"></i> ৳ 0.00</div>
+      <button class="profile-btn"><i class="fa-regular fa-user"></i></button>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <div class="hero-banner">
+    <h1>Instant Top-Up<br><span>Anywhere, Anytime.</span></h1>
+    <p>Bangladesh's most trusted gaming top-up platform by Emon Khan. Fast, secure, and instant delivery via Player ID.</p>
+  </div>
+
+  <!-- GAME CATEGORIES -->
+  <div class="section-title"><i class="fa-solid fa-fire"></i> Trending Games</div>
+  
+  <div class="game-grid" id="gameGrid">
+    <!-- Rendered by JS -->
+  </div>
+
+  <!-- TOP-UP MODAL -->
+  <div class="modal-overlay" id="topupModal">
+    <div class="topup-box">
+      <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      
+      <div class="modal-header">
+        <img src="" id="modalImg" class="modal-game-img">
+        <div>
+          <div class="modal-game-title" id="modalTitle">Game Name</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Instant Delivery via Player ID</div>
+        </div>
+      </div>
+
+      <!-- STEP 1: Player ID -->
+      <div class="step-box">
+        <div class="step-title"><span class="step-badge">1</span> Enter Player Info</div>
+        <div class="input-group">
+          <input type="text" id="playerId" placeholder="Enter Player ID / UID">
+        </div>
+      </div>
+
+      <!-- STEP 2: Select Package -->
+      <div class="step-box">
+        <div class="step-title"><span class="step-badge">2</span> Select Package</div>
+        <div class="pkg-grid" id="pkgGrid">
+          <!-- Packages go here -->
+        </div>
+      </div>
+
+      <!-- STEP 3: Payment Method -->
+      <div class="step-box">
+        <div class="step-title"><span class="step-badge">3</span> Payment Method</div>
+        <div class="pay-grid">
+          <div class="pay-card active" onclick="selectPay(this)">
+            <i class="fa-solid fa-building-columns" style="font-size:1.5rem; margin-bottom:5px; color:#e2136e;"></i><br>bKash
+          </div>
+          <div class="pay-card" onclick="selectPay(this)">
+            <i class="fa-solid fa-mobile-screen" style="font-size:1.5rem; margin-bottom:5px; color:#f58220;"></i><br>Nagad
+          </div>
+          <div class="pay-card" onclick="selectPay(this)">
+            <i class="fa-solid fa-rocket" style="font-size:1.5rem; margin-bottom:5px; color:#8c1560;"></i><br>Rocket
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Checkout -->
+      <div class="checkout-footer">
+        <div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">Total Payable</div>
+          <div class="total-price" id="totalPrice">৳ 0</div>
+        </div>
+        <button class="buy-btn" onclick="confirmTopUp()">Buy Now</button>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2026 EMON TOPUP | Developed by Emon Khan. All Rights Reserved.
+  </footer>
+
+  <script>
+    // ==========================================
+    // GAME DATABASE & PACKAGES
+    // ==========================================
+    const games = [
+      {
+        id: "ff",
+        name: "Free Fire",
+        currency: "Diamonds",
+        icon: "💎",
+        flash: "Hot",
+        img: "https://images.unsplash.com/photo-1620283085439-3f71c4c11438?w=300", 
+        packages: [
+          { amt: 115, price: 75 },
+          { amt: 240, price: 150 },
+          { amt: 355, price: 225 },
+          { amt: 610, price: 390 },
+          { amt: 1240, price: 780 },
+          { amt: 2530, price: 1550 },
+          { amt: "Weekly", price: 160 },
+          { amt: "Monthly", price: 750 }
+        ]
+      },
+      {
+        id: "pubg",
+        name: "PUBG Mobile",
+        currency: "UC",
+        icon: "🪙",
+        flash: "Sale",
+        img: "https://images.unsplash.com/photo-1601053153549-b63351ec12cb?w=300",
+        packages: [
+          { amt: 60, price: 85 },
+          { amt: 325, price: 400 },
+          { amt: 660, price: 800 },
+          { amt: 1800, price: 2050 },
+          { amt: 3850, price: 4000 }
+        ]
+      },
+      {
+        id: "mlbb",
+        name: "Mobile Legends",
+        currency: "Diamonds",
+        icon: "💠",
+        flash: "",
+        img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300",
+        packages: [
+          { amt: 86, price: 140 },
+          { amt: 172, price: 280 },
+          { amt: 257, price: 420 },
+          { amt: 706, price: 1150 }
+        ]
+      },
+      {
+        id: "valorant",
+        name: "Valorant",
+        currency: "VP",
+        icon: "V",
+        flash: "",
+        img: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=300",
+        packages: [
+          { amt: 475, price: 550 },
+          { amt: 1000, price: 1100 },
+          { amt: 2050, price: 2200 }
+        ]
+      },
+      {
+        id: "codm",
+        name: "Call of Duty",
+        currency: "CP",
+        icon: "🎖️",
+        flash: "",
+        img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=300",
+        packages: [
+          { amt: 80, price: 85 },
+          { amt: 420, price: 420 },
+          { amt: 880, price: 850 }
+        ]
+      },
+      {
+        id: "roblox",
+        name: "Roblox",
+        currency: "Robux",
+        icon: "R$",
+        flash: "",
+        img: "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=300",
+        packages: [
+          { amt: 400, price: 650 },
+          { amt: 800, price: 1250 },
+          { amt: 1700, price: 2500 }
+        ]
+      }
+    ];
+
+    // Render Games
+    const gameGrid = document.getElementById('gameGrid');
+    games.forEach(g => {
+      let flashHtml = g.flash ? `<div class="flash-badge">${g.flash}</div>` : '';
+      gameGrid.innerHTML += `
+        <div class="game-card" onclick="openModal('${g.id}')">
+          ${flashHtml}
+          <img src="${g.img}" alt="${g.name}" class="game-img">
+          <div class="game-title">${g.name}</div>
+          <div class="game-subtitle">Top-Up ${g.currency}</div>
+        </div>
+      `;
+    });
+
+    // ==========================================
+    // MODAL LOGIC
+    // ==========================================
+    let currentPrice = 0;
+    let selectedPackageText = "";
+
+    function openModal(id) {
+      const game = games.find(g => g.id === id);
+      
+      document.getElementById('modalImg').src = game.img;
+      document.getElementById('modalTitle').innerText = game.name;
+      document.getElementById('playerId').value = '';
+      
+      // Render Packages
+      const pkgGrid = document.getElementById('pkgGrid');
+      pkgGrid.innerHTML = '';
+      currentPrice = 0;
+      selectedPackageText = "";
+      document.getElementById('totalPrice').innerText = `৳ 0`;
+
+      game.packages.forEach((pkg, index) => {
+        let isString = typeof pkg.amt === 'string';
+        let amtDisplay = isString ? pkg.amt : `${pkg.amt} ${game.icon}`;
+        let subText = isString ? `${game.currency}` : `${game.currency}`;
+
+        pkgGrid.innerHTML += `
+          <div class="pkg-card" onclick="selectPkg(this, ${pkg.price}, '${amtDisplay}')">
+            <div class="pkg-amt">${amtDisplay}</div>
+            <div style="font-size:0.7rem; color:var(--text-muted);">${subText}</div>
+            <div class="pkg-price">৳ ${pkg.price}</div>
+          </div>
+        `;
+      });
+
+      document.getElementById('topupModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('topupModal').style.display = 'none';
+    }
+
+    function selectPkg(elem, price, pkgName) {
+      document.querySelectorAll('.pkg-card').forEach(c => c.classList.remove('active'));
+      elem.classList.add('active');
+      currentPrice = price;
+      selectedPackageText = pkgName;
+      document.getElementById('totalPrice').innerText = `৳ ${price}`;
+    }
+
+    function selectPay(elem) {
+      document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('active'));
+      elem.classList.add('active');
+    }
+
+    function confirmTopUp() {
+      const playerId = document.getElementById('playerId').value.trim();
+      
+      if(!playerId) return alert("Please enter your Player ID / UID first!");
+      if(currentPrice === 0) return alert("Please select a Top-Up package!");
+
+      const activePay = document.querySelector('.pay-card.active').innerText.trim();
+
+      alert(`✅ Order Created Successfully!\n\nID: ${playerId}\nPackage: ${selectedPackageText}\nAmount: ৳ ${currentPrice}\nMethod: ${activePay}\n\nThanks for choosing EMON TOPUP!`);
+      closeModal();
+    }
+
+    // Close on overlay click
+    window.onclick = function(event) {
+      const modal = document.getElementById('topupModal');
+      if (event.target == modal) {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>
