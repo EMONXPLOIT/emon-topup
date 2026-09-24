@@ -10,7 +10,7 @@
 
   <style>
     :root {
-      --primary: #2d9472; /* The exact green color from the screenshot */
+      --primary: #2d9472; 
       --bg-main: #f4f6f9;
       --text-dark: #1a1a1a;
       --text-muted: #666;
@@ -18,6 +18,44 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
     body { background-color: var(--bg-main); color: var(--text-dark); overflow-x: hidden; }
+
+    /* ================= LOGIN / SIGNUP OVERLAY ================= */
+    .auth-overlay {
+      position: fixed; inset: 0; background: #fff; z-index: 9999;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 20px; text-align: center;
+    }
+    .auth-box {
+      width: 100%; max-width: 400px; background: #fff; padding: 30px;
+      border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      border: 1px solid #eaeaea;
+    }
+    .auth-logo { font-size: 2rem; font-weight: 800; margin-bottom: 20px; color: #111; }
+    .auth-logo span { color: var(--primary); }
+    .auth-logo i { color: var(--primary); }
+    
+    .auth-input {
+      width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid #ccc;
+      border-radius: 8px; font-size: 1rem; outline: none;
+    }
+    .auth-input:focus { border-color: var(--primary); }
+    
+    .auth-btn {
+      width: 100%; padding: 14px; background: var(--primary); color: #fff;
+      border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700;
+      cursor: pointer; transition: 0.3s; margin-bottom: 15px;
+    }
+    .auth-btn:hover { background: #237a5d; }
+    
+    .google-btn {
+      width: 100%; padding: 12px; background: #fff; color: #333;
+      border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px;
+    }
+    .google-btn img { width: 24px; }
+
+    /* ================= MAIN WEBSITE CONTENT ================= */
+    .main-content { display: none; } /* Hidden until logged in */
 
     /* ================= HEADER ================= */
     header {
@@ -58,7 +96,7 @@
       border: 1px solid #eaeaea; text-align: center; cursor: pointer; transition: 0.3s;
     }
     .product-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-    .product-img { width: 100%; aspect-ratio: 1; object-fit: cover; border-bottom: 1px solid #eaeaea; }
+    .product-img { width: 100%; aspect-ratio: 1; object-fit: cover; border-bottom: 1px solid #eaeaea; background: #f0f0f0; }
     .product-title { padding: 12px 8px; font-size: 0.9rem; font-weight: 700; color: #333; }
 
     /* ================= DOWNLOAD APP ================= */
@@ -87,8 +125,9 @@
       display: flex; justify-content: center; align-items: center; color: #fff; font-size: 1.2rem; text-decoration: none;
     }
 
-    .payment-methods { background: #fff; padding: 5px; border-radius: 5px; display: inline-block; margin-bottom: 20px; }
-    .payment-methods img { height: 20px; }
+    .payment-methods { background: #fff; padding: 8px 15px; border-radius: 8px; display: inline-flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+    .payment-methods img { height: 25px; object-fit: contain; }
+    .payment-methods span { color: #000; font-weight: bold; font-size: 0.85rem; border-left: 2px solid #ccc; padding-left: 15px; }
 
     .copyright { font-size: 0.85rem; color: rgba(255,255,255,0.8); border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px; }
 
@@ -114,139 +153,181 @@
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <div class="logo">
-      <i class="fa-solid fa-gamepad"></i> EMON <span>BaZaR</span>
-    </div>
-    <div class="profile-nav">
-      <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="Profile">
-      <span>Emon12345678khanemon</span> <i class="fa-solid fa-angle-down" style="font-size:0.8rem;"></i>
-    </div>
-  </header>
-
-  <!-- HERO SLIDER -->
-  <div class="slider-container">
-    <button class="slider-arrow left"><i class="fa-solid fa-chevron-left"></i></button>
-    <!-- Placeholder for the Banner Image -->
-    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800" alt="Offer Banner" style="height: 180px;">
-    <button class="slider-arrow right"><i class="fa-solid fa-chevron-right"></i></button>
-  </div>
-
-  <!-- SECTION TITLE -->
-  <div class="section-title">New Game <span>Top-Up</span></div>
-
-  <!-- PRODUCT GRID -->
-  <div class="product-grid" id="productGrid">
-    <!-- Products rendered via JS matching the screenshots -->
-  </div>
-
-  <!-- DOWNLOAD APP -->
-  <div class="download-section">
-    <h3>DOWNLOAD OUR MOBILE APP</h3>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="contact-btns">
-      <a href="tel:+8801728576508" class="contact-btn">
-        <i class="fa-solid fa-phone"></i> +8801728576508
-      </a>
-      <a href="https://wa.me/8801728576508" class="contact-btn" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i> +8801728576508 <span style="font-size:0.7rem; margin-left:auto;">9AM - 10PM</span>
-      </a>
-    </div>
-
-    <div class="footer-links">
-      <h4>ABOUT</h4>
-      <ul>
-        <li><a href="#">Terms & condition</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Shipment Info</a></li>
-        <li><a href="#">Refund and Return Policy</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="#">About us</a></li>
-        <br>
-        <li><a href="#">Free Fire</a></li>
-        <li><a href="#">Pubg Mobile</a></li>
-        <li><a href="#">Call of Duty</a></li>
-        <li><a href="#">Clash of clan</a></li>
-      </ul>
-    </div>
-
-    <div class="footer-links" style="margin-top: 40px;">
-      <h4>STAY CONNECTED</h4>
-      <p style="margin-bottom: 20px;">Emon Bazar<br>Email: emonbazar@gmail.com</p>
+  <!-- ================= LOGIN / SIGNUP PAGE ================= -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-box">
+      <div class="auth-logo"><i class="fa-solid fa-gamepad"></i> EMON <span>BaZaR</span></div>
+      <p style="color: var(--text-muted); margin-bottom: 25px; font-size: 0.9rem;">Please login to access the Top-Up store.</p>
       
-      <div class="social-links">
-        <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-        <a href="#"><i class="fa-brands fa-youtube"></i></a>
-        <a href="#"><i class="fa-brands fa-instagram"></i></a>
-      </div>
-    </div>
-
-    <div class="payment-methods">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1024px-Visa_Inc._logo.svg.png" alt="Visa">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1024px-Mastercard-logo.svg.png" alt="Mastercard">
-      <span style="color:#000; font-weight:bold; font-size:0.8rem; margin-left:10px;">bKash | Nagad | Rocket</span>
-    </div>
-
-    <div class="copyright">
-      &copy; Copyright 2026. All Rights Reserved.<br>Developed by Emon Bazar
-    </div>
-  </footer>
-
-  <!-- WHATSAPP ORDER MODAL -->
-  <div class="modal-overlay" id="orderModal">
-    <div class="modal-box">
-      <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
-      <h3 id="modalTitle">Order Top-Up</h3>
+      <input type="email" id="loginEmail" class="auth-input" placeholder="Email / Gmail Address">
+      <input type="password" id="loginPass" class="auth-input" placeholder="Password">
       
-      <div class="form-group">
-        <label>Player ID / UID</label>
-        <input type="text" id="playerId" placeholder="Example: 123456789">
-      </div>
-
-      <div class="form-group">
-        <label>Select Package</label>
-        <select id="packageSelect">
-          <option value="115 Diamonds - 75 TK">115 Diamonds - 75 TK</option>
-          <option value="240 Diamonds - 150 TK">240 Diamonds - 150 TK</option>
-          <option value="Weekly Pass - 160 TK">Weekly Pass - 160 TK</option>
-          <option value="Monthly Pass - 750 TK">Monthly Pass - 750 TK</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Your WhatsApp Number</label>
-        <input type="text" id="userPhone" placeholder="017XXXXXXXX">
-      </div>
-
-      <button class="whatsapp-btn" onclick="sendToWhatsApp()">
-        <i class="fa-brands fa-whatsapp"></i> Order Via WhatsApp
+      <button class="auth-btn" onclick="processLogin()">Login / Sign Up</button>
+      
+      <div style="margin: 15px 0; font-size: 0.85rem; color: #999;">OR</div>
+      
+      <button class="google-btn" onclick="processLogin()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
+        Continue with Google
       </button>
-      <p style="text-align:center; font-size:0.8rem; color:#666; margin-top:10px;">
-        অর্ডার প্লেস করলে সরাসরি আমাদের অ্যাডমিনের হোয়াটসঅ্যাপে চলে যাবে।
-      </p>
+    </div>
+  </div>
+
+  <!-- ================= MAIN WEBSITE CONTENT ================= -->
+  <div class="main-content" id="mainContent">
+    
+    <!-- HEADER -->
+    <header>
+      <div class="logo">
+        <i class="fa-solid fa-gamepad"></i> EMON <span>BaZaR</span>
+      </div>
+      <div class="profile-nav">
+        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="Profile">
+        <span id="displayUserEmail">Emon12345678...</span> <i class="fa-solid fa-angle-down" style="font-size:0.8rem;"></i>
+      </div>
+    </header>
+
+    <!-- HERO SLIDER -->
+    <div class="slider-container">
+      <button class="slider-arrow left"><i class="fa-solid fa-chevron-left"></i></button>
+      <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=800" alt="Offer Banner" style="height: 180px; object-fit: cover;">
+      <button class="slider-arrow right"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <!-- SECTION TITLE -->
+    <div class="section-title">New Game <span>Top-Up</span></div>
+
+    <!-- PRODUCT GRID -->
+    <div class="product-grid" id="productGrid">
+      <!-- Products rendered via JS -->
+    </div>
+
+    <!-- DOWNLOAD APP -->
+    <div class="download-section">
+      <h3>DOWNLOAD OUR MOBILE APP</h3>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play">
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="contact-btns">
+        <a href="tel:+8801728576508" class="contact-btn">
+          <i class="fa-solid fa-phone"></i> +8801728576508
+        </a>
+        <a href="https://wa.me/8801728576508" class="contact-btn" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i> +8801728576508 <span style="font-size:0.7rem; margin-left:auto;">9AM - 10PM</span>
+        </a>
+      </div>
+
+      <div class="footer-links">
+        <h4>ABOUT</h4>
+        <ul>
+          <li><a href="#">Terms & condition</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Shipment Info</a></li>
+          <li><a href="#">Refund and Return Policy</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">About us</a></li>
+          <br>
+          <li><a href="#">Free Fire</a></li>
+          <li><a href="#">Pubg Mobile</a></li>
+          <li><a href="#">Call of Duty</a></li>
+          <li><a href="#">Clash of clan</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links" style="margin-top: 40px;">
+        <h4>STAY CONNECTED</h4>
+        <p style="margin-bottom: 20px;">Emon Bazar<br>Email: emonbazar@gmail.com</p>
+        
+        <div class="social-links">
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+
+      <!-- FIXED PAYMENT METHODS -->
+      <div class="payment-methods">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/200px-Visa_Inc._logo.svg.png" alt="Visa">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/200px-Mastercard-logo.svg.png" alt="Mastercard">
+        <span>bKash | Nagad | Rocket</span>
+      </div>
+
+      <div class="copyright">
+        &copy; Copyright 2026. All Rights Reserved.<br>Developed by Emon Bazar
+      </div>
+    </footer>
+
+    <!-- WHATSAPP ORDER MODAL -->
+    <div class="modal-overlay" id="orderModal">
+      <div class="modal-box">
+        <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+        <h3 id="modalTitle">Order Top-Up</h3>
+        
+        <div class="form-group">
+          <label>Player ID / UID</label>
+          <input type="text" id="playerId" placeholder="Example: 123456789">
+        </div>
+
+        <div class="form-group">
+          <label>Select Package</label>
+          <select id="packageSelect">
+            <option value="115 Diamonds - 75 TK">115 Diamonds - 75 TK</option>
+            <option value="240 Diamonds - 150 TK">240 Diamonds - 150 TK</option>
+            <option value="Weekly Pass - 160 TK">Weekly Pass - 160 TK</option>
+            <option value="Monthly Pass - 750 TK">Monthly Pass - 750 TK</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Your WhatsApp Number</label>
+          <input type="text" id="userPhone" placeholder="017XXXXXXXX">
+        </div>
+
+        <button class="whatsapp-btn" onclick="sendToWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i> Order Via WhatsApp
+        </button>
+        <p style="text-align:center; font-size:0.8rem; color:#666; margin-top:10px;">
+          অর্ডার প্লেস করলে সরাসরি আমাদের অ্যাডমিনের হোয়াটসঅ্যাপে চলে যাবে।
+        </p>
+      </div>
     </div>
   </div>
 
   <script>
     // ==========================================
-    // PRODUCT DATA (Matching Screenshots)
+    // LOGIN AUTHENTICATION LOGIC
+    // ==========================================
+    document.body.style.overflow = 'hidden'; // Disable scroll on load
+
+    function processLogin() {
+      const email = document.getElementById('loginEmail').value.trim();
+      
+      // If user provided email, display it. Otherwise show default.
+      if(email !== "") {
+        document.getElementById('displayUserEmail').innerText = email.split('@')[0];
+      }
+
+      document.getElementById('authOverlay').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+      document.body.style.overflow = 'auto'; // Enable scroll
+    }
+
+    // ==========================================
+    // CLEAR, HIGH-QUALITY PRODUCT DATA
     // ==========================================
     const products = [
-      { name: "Free Fire (ID CODE)", img: "https://images.unsplash.com/photo-1620283085439-3f71c4c11438?w=300" },
-      { name: "Free Fire - 200 Like প্রতিদিন", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300" },
-      { name: "FF UNIPIN VOUCHER", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=300" },
-      { name: "Evo Access (ID CODE)", img: "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=300" },
-      { name: "New Level Up Pass", img: "https://images.unsplash.com/photo-1601053153549-b63351ec12cb?w=300" },
-      { name: "PUBG UC VOUCHER", img: "https://images.unsplash.com/photo-1589003077984-894e133dabab?w=300" },
-      { name: "PUBG MOBILE UC", img: "https://images.unsplash.com/photo-1579829366248-204fe8413f31?w=300" },
-      { name: "Google AI Pro", img: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=300" },
-      { name: "YouTube Premium", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Youtube_Premium_Logo.svg/1024px-Youtube_Premium_Logo.svg.png" },
-      { name: "Chat GPT", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" }
+      { name: "Free Fire (ID CODE)", img: "https://images.unsplash.com/photo-1620283085439-3f71c4c11438?w=500" },
+      { name: "Free Fire - 200 Like", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500" },
+      { name: "FF UNIPIN VOUCHER", img: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=500" },
+      { name: "Evo Access (ID CODE)", img: "https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=500" },
+      { name: "New Level Up Pass", img: "https://images.unsplash.com/photo-1601053153549-b63351ec12cb?w=500" },
+      { name: "PUBG UC VOUCHER", img: "https://images.unsplash.com/photo-1589003077984-894e133dabab?w=500" },
+      { name: "PUBG MOBILE UC", img: "https://images.unsplash.com/photo-1579829366248-204fe8413f31?w=500" },
+      { name: "Google AI Pro", img: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=500" },
+      { name: "YouTube Premium", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Youtube_Premium_Logo.svg/500px-Youtube_Premium_Logo.svg.png" },
+      { name: "Chat GPT Plus", img: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" }
     ];
 
     const productGrid = document.getElementById('productGrid');
@@ -261,11 +342,9 @@
     });
 
     // ==========================================
-    // WHATSAPP ORDER LOGIC (ভাইয়ের সাথে কানেক্ট)
+    // WHATSAPP ORDER LOGIC
     // ==========================================
-    // এখানে আপনার বা আপনার ভাইয়ের আসল হোয়াটসঅ্যাপ নাম্বার দিন (কান্ট্রি কোড সহ)
     const ADMIN_WHATSAPP = "8801728576508"; 
-    
     let selectedGame = "";
 
     function openModal(gameName) {
@@ -288,10 +367,7 @@
         return;
       }
 
-      // মেসেজ তৈরি
       const message = `হ্যালো EMON BaZaR,\nআমি একটি টপ-আপ নিতে চাই:\n\n🎮 গেম: ${selectedGame}\n🆔 প্লেয়ার আইডি: ${playerId}\n💎 প্যাকেজ: ${package}\n📞 আমার নাম্বার: ${phone}\n\nদয়া করে আমাকে পেমেন্ট নাম্বার দিন।`;
-
-      // হোয়াটসঅ্যাপে পাঠানো
       const whatsappUrl = `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
       
