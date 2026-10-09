@@ -3,349 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp 1:1 Fake Screenshot Editor</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Pro Screenshot Text Editor | EMONXPLOIT</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
-
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #e0e0e0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #1e1e2e;
+            color: white;
             margin: 0;
             display: flex;
-            justify-content: center;
-            padding: 20px;
-            gap: 20px;
-            flex-wrap: wrap;
+            height: 100vh;
         }
 
-        /* Control Panel */
-        .editor-panel {
-            background: white;
+        /* Left Toolbar */
+        .toolbar {
+            width: 300px;
+            background: #282a36;
             padding: 20px;
-            border-radius: 8px;
-            width: 320px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            height: fit-content;
-        }
-
-        .editor-panel input, .editor-panel button, .editor-panel select {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .editor-panel button {
-            background: #00a884;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .editor-panel button:hover { background: #008f6f; }
-        .btn-dl { background: #25D366 !important; margin-top: 10px;}
-
-        /* Phone Screen Frame */
-        .phone-frame {
-            width: 390px;
-            height: 844px; /* Phone ratio */
-            background: #efeae2;
-            position: relative;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); /* Default WA Doodle */
-            background-size: cover;
-        }
-
-        /* Top Status Bar (Android Style) */
-        .status-bar {
-            background: #ffffff;
-            color: #000000;
-            padding: 5px 15px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            font-weight: 500;
-            z-index: 10;
-        }
-        .status-icons i { margin-left: 5px; font-size: 12px; }
-
-        /* WhatsApp Header (White theme) */
-        .wa-header {
-            background: #ffffff;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            z-index: 10;
-        }
-        .wa-header .back-btn { font-size: 20px; color: #1f2c34; margin-right: 5px; cursor: pointer; }
-        .wa-header .profile-pic {
-            width: 40px; height: 40px; border-radius: 50%;
-            background: #dfe5e7; margin-right: 10px;
-            object-fit: cover;
-        }
-        .wa-header .name-area { flex: 1; }
-        .wa-header .name-area h2 { margin: 0; font-size: 18px; font-weight: 500; color: #111b21; }
-        .wa-header .header-icons { display: flex; gap: 20px; color: #1f2c34; font-size: 18px; }
-
-        /* Chat Area */
-        .chat-area {
-            flex: 1;
-            padding: 15px;
+            gap: 15px;
             overflow-y: auto;
+        }
+
+        .toolbar h2 {
+            margin: 0;
+            color: #50fa7b;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .tool-group {
+            background: #44475a;
+            padding: 15px;
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            z-index: 5;
         }
 
-        /* Date Bubble */
-        .date-bubble {
-            background: #ffffff;
-            color: #54656f;
-            font-size: 12px;
-            padding: 5px 12px;
-            border-radius: 10px;
-            align-self: center;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
-            margin-bottom: 5px;
-        }
-
-        /* Encryption Bubble */
-        .encryption-msg {
-            background: #ffeecd;
-            color: #54656f;
-            font-size: 12px;
-            text-align: center;
-            padding: 8px 15px;
-            border-radius: 10px;
-            align-self: center;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
-            max-width: 85%;
-            line-height: 1.4;
-        }
-        .encryption-msg span { color: #027eb5; cursor: pointer;}
-
-        /* Messages */
-        .message {
-            max-width: 75%;
-            padding: 6px 10px;
-            border-radius: 10px;
-            position: relative;
-            font-size: 15px;
-            color: #111b21;
-            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-            word-wrap: break-word;
-        }
-        .message .time {
-            font-size: 11px;
-            color: #667781;
-            float: right;
-            margin: 10px 0 -5px 10px;
-        }
-        .msg-sent {
-            background: #e7ffdb;
-            align-self: flex-end;
-            border-top-right-radius: 0;
-        }
-        .msg-recv {
-            background: #ffffff;
-            align-self: flex-start;
-            border-top-left-radius: 0;
-        }
-
-        /* Input Area (Bottom) */
-        .input-area {
+        input[type="file"], input[type="text"], input[type="color"], input[type="number"] {
+            width: 100%;
             padding: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            margin-bottom: 15px;
+            border: none;
+            border-radius: 4px;
+            background: #6272a4;
+            color: white;
+            box-sizing: border-box;
         }
-        .input-box {
+
+        button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #bd93f9;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #ff79c6;
+        }
+
+        .btn-success {
+            background: #50fa7b;
+            color: #282a36;
+        }
+        .btn-success:hover {
+            background: #5af182;
+        }
+
+        /* Canvas Area (Right side) */
+        .workspace {
             flex: 1;
-            background: #ffffff;
-            border-radius: 25px;
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: #8696a0;
-            font-size: 16px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        .input-box .cursor-line {
-            width: 1px; height: 20px; background: #00a884; margin-left: 2px;
-            animation: blink 1s infinite;
-        }
-        .mic-btn {
-            width: 48px; height: 48px;
-            background: #00a884;
-            border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            color: white;
-            font-size: 20px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            background: #191a21;
+            padding: 20px;
+            overflow: auto;
         }
 
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        #editor-container {
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            /* Default white background if no image is loaded */
+            background: #fff; 
+        }
+
+        #bg-image {
+            display: block;
+            max-width: 100%;
+            max-height: 85vh;
+            pointer-events: none; /* Prevents dragging the image itself */
+        }
+
+        /* Draggable Text Elements */
+        .draggable-text {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            cursor: move;
+            padding: 2px 5px;
+            border: 1px dashed transparent;
+            user-select: none;
+            white-space: pre-wrap; /* Allows multi-line text */
+        }
+
+        .draggable-text:hover, .draggable-text.active {
+            border: 1px dashed #ff79c6;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: #ff5555;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .draggable-text.active .delete-btn {
+            display: flex;
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- Editor Panel -->
-    <div class="editor-panel">
-        <h3 style="margin:0; text-align:center;">1:1 Screenshot Editor</h3>
-        <hr>
+    <!-- Left Controls -->
+    <div class="toolbar">
+        <h2><i class="fas fa-magic"></i> SS Image Editor</h2>
         
-        <label>Status Bar Time:</label>
-        <input type="text" id="sysTime" value="8:35 PM" oninput="updateUI()">
-        
-        <label>Battery %:</label>
-        <input type="text" id="sysBat" value="8" oninput="updateUI()">
-
-        <label>Profile Name:</label>
-        <input type="text" id="profName" value="৯১" oninput="updateUI()">
-
-        <label>Profile Picture:</label>
-        <input type="file" id="profPicInput" accept="image/*">
-
-        <hr>
-        <label>Add Message:</label>
-        <input type="text" id="newMsg" placeholder="Type message...">
-        <input type="text" id="msgTime" placeholder="Time (e.g. 8:36 PM)">
-        
-        <div style="display:flex; gap:5px;">
-            <button style="flex:1; background:#ffffff; color:black; border:1px solid #ccc;" onclick="addMsg('recv')">Received</button>
-            <button style="flex:1;" onclick="addMsg('sent')">Sent</button>
+        <div class="tool-group">
+            <label>১. স্ক্রিনশট আপলোড করুন:</label>
+            <input type="file" id="imageLoader" accept="image/*">
         </div>
 
-        <button class="btn-dl" onclick="downloadSS()"><i class="fas fa-download"></i> Download Screenshot</button>
+        <div class="tool-group">
+            <label>২. নতুন টেক্সট যোগ করুন:</label>
+            <input type="text" id="textInput" placeholder="যেকোনো লেখা দিন...">
+            
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 1;">
+                    <label>রঙ:</label>
+                    <input type="color" id="textColor" value="#000000">
+                </div>
+                <div style="flex: 1;">
+                    <label>সাইজ:</label>
+                    <input type="number" id="textSize" value="16" min="8" max="100">
+                </div>
+            </div>
+            
+            <button onclick="addText()"><i class="fas fa-plus"></i> টেক্সট যোগ করুন</button>
+        </div>
+
+        <div class="tool-group">
+            <label style="font-size: 0.9rem; color: #f1fa8c;">
+                💡 <b>কিভাবে কাজ করবেন:</b><br>
+                ১. অরিজিনাল ছবির লেখার ওপর নতুন টেক্সট বসান।<br>
+                ২. মাউস দিয়ে টেনে সঠিক জায়গায় রাখুন।<br>
+                ৩. প্রয়োজন হলে ব্যাকগ্রাউন্ড কালার দিয়ে পুরোনো লেখা ঢেকে দিন।
+            </label>
+        </div>
+
+        <button class="btn-success" onclick="downloadEditedImage()" style="margin-top: auto;">
+            <i class="fas fa-download"></i> এডিটেড ছবি ডাউনলোড
+        </button>
     </div>
 
-    <!-- Phone UI Preview (Exactly like your screenshot) -->
-    <div class="phone-frame" id="ss-capture">
-        
-        <!-- Status Bar -->
-        <div class="status-bar">
-            <span id="ui-time">8:35 PM</span>
-            <div class="status-icons">
-                <i class="fab fa-youtube"></i>
-                <i class="fab fa-tiktok"></i>
-                <i class="fas fa-ellipsis-h"></i>
-                <span style="margin-left: 20px;">
-                    <i class="fas fa-signal"></i>
-                    <i class="fas fa-wifi"></i>
-                    <i class="fas fa-battery-quarter"></i> <span id="ui-bat">8</span>
-                </span>
-            </div>
+    <!-- Right Workspace -->
+    <div class="workspace">
+        <div id="editor-container">
+            <img id="bg-image" src="" style="display: none;" alt="Uploaded Screenshot">
+            <!-- Draggable elements will be added here -->
         </div>
-
-        <!-- WA Header -->
-        <div class="wa-header">
-            <i class="fas fa-arrow-left back-btn"></i>
-            <!-- Default placeholder matching your screenshot -->
-            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" id="ui-dp" class="profile-pic">
-            <div class="name-area">
-                <h2 id="ui-name">৯১</h2>
-            </div>
-            <div class="header-icons">
-                <i class="fas fa-video"></i>
-                <i class="fas fa-phone-alt"></i>
-                <i class="fas fa-ellipsis-v"></i>
-            </div>
-        </div>
-
-        <!-- Chat Body -->
-        <div class="chat-area" id="chatBody">
-            <div class="date-bubble">16 February 2026</div>
-            <div class="encryption-msg">
-                <i class="fas fa-lock" style="font-size:10px;"></i> Messages and calls are end-to-end encrypted. Only people in this chat can read, listen to, or share them.<br>
-                <span>Learn more</span>
-            </div>
-        </div>
-
-        <!-- Bottom Input (Like the screenshot) -->
-        <div class="input-area">
-            <div class="input-box">
-                <i class="far fa-smile" style="font-size:22px;"></i>
-                <span style="flex:1; display:flex; align-items:center;">Message <div class="cursor-line"></div></span>
-                <i class="fas fa-paperclip" style="font-size:20px; transform: rotate(-45deg);"></i>
-                <i class="fas fa-camera" style="font-size:20px;"></i>
-            </div>
-            <div class="mic-btn">
-                <i class="fas fa-microphone"></i>
-            </div>
-        </div>
-
     </div>
 
     <script>
-        // Update basic info in real-time
-        function updateUI() {
-            document.getElementById('ui-time').innerText = document.getElementById('sysTime').value;
-            document.getElementById('ui-bat').innerText = document.getElementById('sysBat').value;
-            document.getElementById('ui-name').innerText = document.getElementById('profName').value;
-        }
+        const imageLoader = document.getElementById('imageLoader');
+        const bgImage = document.getElementById('bg-image');
+        const editorContainer = document.getElementById('editor-container');
+        let activeElement = null;
 
-        // Profile Picture Upload
-        document.getElementById('profPicInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
+        // 1. Image Upload Handler
+        imageLoader.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('ui-dp').src = e.target.result;
+                reader.onload = function(event) {
+                    bgImage.src = event.target.result;
+                    bgImage.style.display = 'block';
+                    
+                    // Clear previous texts if a new image is loaded
+                    document.querySelectorAll('.draggable-text').forEach(el => el.remove());
                 }
                 reader.readAsDataURL(file);
             }
         });
 
-        // Add Chat Messages
-        function addMsg(type) {
-            const text = document.getElementById('newMsg').value;
-            const time = document.getElementById('msgTime').value;
-            if(!text) return;
+        // Paste Image from Clipboard
+        window.addEventListener('paste', e => {
+            const items = e.clipboardData.items;
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf('image') !== -1) {
+                    const blob = items[i].getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        bgImage.src = event.target.result;
+                        bgImage.style.display = 'block';
+                    };
+                    reader.readAsDataURL(blob);
+                }
+            }
+        });
 
-            const msgDiv = document.createElement('div');
-            msgDiv.className = type === 'sent' ? 'message msg-sent' : 'message msg-recv';
+        // 2. Add Text to Canvas
+        function addText() {
+            if(!bgImage.src) {
+                alert("প্রথমে একটি স্ক্রিনশট আপলোড বা পেস্ট করুন!");
+                return;
+            }
+
+            const textVal = document.getElementById('textInput').value;
+            const colorVal = document.getElementById('textColor').value;
+            const sizeVal = document.getElementById('textSize').value;
+
+            if(!textVal) return;
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'draggable-text';
+            textDiv.style.color = colorVal;
+            textDiv.style.fontSize = sizeVal + 'px';
+            textDiv.innerText = textVal;
+
+            // Optional: Background to hide old text. Using a slight solid background matching common themes.
+            // If the user is editing a white theme WhatsApp, the background can be white.
+            // You can add a color picker for background later if needed.
+            textDiv.style.backgroundColor = '#ffffff'; // Default cover color (white)
+
+            // Add Delete Button
+            const delBtn = document.createElement('div');
+            delBtn.className = 'delete-btn';
+            delBtn.innerHTML = '<i class="fas fa-times"></i>';
+            delBtn.onclick = function() { textDiv.remove(); };
+            textDiv.appendChild(delBtn);
+
+            // Make it draggable
+            makeDraggable(textDiv);
             
-            let tick = type === 'sent' ? '<i class="fas fa-check-double" style="color:#53bdeb; margin-left:4px;"></i>' : '';
-            msgDiv.innerHTML = `${text} <span class="time">${time} ${tick}</span>`;
-
-            document.getElementById('chatBody').appendChild(msgDiv);
-            document.getElementById('newMsg').value = '';
+            editorContainer.appendChild(textDiv);
+            document.getElementById('textInput').value = ''; // clear input
         }
 
-        // Download High-Quality Screenshot
-        function downloadSS() {
-            const element = document.getElementById('ss-capture');
-            
-            // Hide the blinking cursor before taking screenshot for perfection
-            const cursor = document.querySelector('.cursor-line');
-            if(cursor) cursor.style.display = 'none';
+        // 3. Drag and Drop Logic
+        function makeDraggable(elmnt) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
-            html2canvas(element, {
-                scale: 3, // High resolution (3x)
+            elmnt.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // Get mouse position at startup
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+                
+                // Set active styling
+                if(activeElement) activeElement.classList.remove('active');
+                activeElement = elmnt;
+                elmnt.classList.add('active');
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // Calculate new position
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // Set element's new position
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                // Stop moving when mouse button is released
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // Deselect element when clicking outside
+        editorContainer.addEventListener('mousedown', function(e) {
+            if(e.target === editorContainer || e.target === bgImage) {
+                if(activeElement) {
+                    activeElement.classList.remove('active');
+                    activeElement = null;
+                }
+            }
+        });
+
+        // 4. Download Final Edited Image
+        function downloadEditedImage() {
+            if(!bgImage.src) {
+                alert("কোনো ছবি পাওয়া যায়নি!");
+                return;
+            }
+
+            // Remove active borders before taking screenshot
+            if(activeElement) activeElement.classList.remove('active');
+
+            html2canvas(editorContainer, {
+                scale: 2, // High resolution
                 useCORS: true
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'Screenshot_WhatsApp_Edited.jpg';
+                link.download = 'Edited_Screenshot_EMONXPLOIT.jpg';
                 link.href = canvas.toDataURL('image/jpeg', 0.9);
                 link.click();
-                
-                // Restore cursor
-                if(cursor) cursor.style.display = 'block';
             });
         }
     </script>
