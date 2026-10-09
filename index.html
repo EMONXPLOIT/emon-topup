@@ -3,305 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atomic Progress | Emon Islam</title>
+    <title>WhatsApp Mock Chat | EMONXPLOIT</title>
     <!-- FontAwesome for Icons -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- html2canvas for downloading the chat as an image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* Modern Dark Theme CSS */
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --accent-color: #3b82f6;
-            --accent-hover: #2563eb;
-            --danger: #ef4444;
-        }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: #f0f2f5;
             margin: 0;
             padding: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        h1 {
-            color: var(--accent-color);
-            margin: 0 0 5px 0;
-            font-size: 2.5rem;
-            letter-spacing: 2px;
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            color: #94a3b8;
-            font-style: italic;
-        }
-
-        .app-container {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 15px;
-            width: 100%;
-            max-width: 500px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            width: 100%;
-            background: #334155;
+        /* Control Panel Styles */
+        .controls {
+            background: white;
+            padding: 20px;
             border-radius: 10px;
-            margin-bottom: 25px;
-            height: 12px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #3b82f6, #60a5fa);
-            width: 0%;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Input Section */
-        .input-group {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 300px;
             display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
+            flex-direction: column;
+            gap: 15px;
         }
 
-        input[type="text"] {
-            flex: 1;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background: #0f172a;
-            color: white;
+        .controls h2 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        input, button {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
             font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--accent-color);
         }
 
         button {
-            padding: 12px 20px;
-            border-radius: 8px;
-            border: none;
-            background: var(--accent-color);
+            background-color: #128C7E;
             color: white;
+            border: none;
             cursor: pointer;
             font-weight: bold;
-            transition: 0.3s;
         }
 
         button:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
+            background-color: #075E54;
         }
 
-        /* Habit List */
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        .btn-download {
+            background-color: #25D366;
+            margin-top: 10px;
         }
 
-        li {
+        .btn-download:hover {
+            background-color: #1ebe5d;
+        }
+
+        /* WhatsApp Chat Preview Styles */
+        .chat-container {
+            width: 350px;
+            background: #e5ddd5;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* WhatsApp Header */
+        .chat-header {
+            background-color: #075E54;
+            color: white;
+            padding: 10px 15px;
+            display: flex;
             align-items: center;
-            background: #334155;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            gap: 15px;
         }
 
-        li.completed {
-            opacity: 0.6;
-            text-decoration: line-through;
-            border-left: 4px solid var(--accent-color);
+        .chat-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #ccc;
         }
 
-        .habit-text {
+        .header-info {
             flex: 1;
-            cursor: pointer;
+        }
+
+        .header-info h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .header-info p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #d1d1d1;
+        }
+
+        .header-icons i {
+            margin-left: 15px;
             font-size: 1.1rem;
         }
 
-        .delete-btn {
-            background: var(--danger);
-            padding: 8px 12px;
-            font-size: 0.9rem;
+        /* Chat Area */
+        .chat-box {
+            padding: 20px 15px;
+            min-height: 400px;
+            max-height: 500px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            /* Background Pattern */
+            background-image: url('https://i.ibb.co/3s1f17G/wa-bg.png');
+            background-size: cover;
         }
 
-        .delete-btn:hover {
-            background: #dc2626;
+        .msg {
+            max-width: 75%;
+            padding: 8px 10px;
+            border-radius: 7px;
+            position: relative;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
         }
 
-        /* Footer / Developer Section */
-        footer {
-            margin-top: auto;
-            padding-top: 40px;
+        .msg .time {
+            font-size: 0.65rem;
+            color: #888;
+            float: right;
+            margin: 10px 0 -5px 10px;
+        }
+
+        .msg.sent {
+            align-self: flex-end;
+            background-color: #dcf8c6;
+            border-top-right-radius: 0;
+        }
+
+        .msg.received {
+            align-self: flex-start;
+            background-color: white;
+            border-top-left-radius: 0;
+        }
+
+        /* Credit */
+        .credit {
             text-align: center;
-        }
-
-        .dev-profile {
-            background: var(--card-bg);
-            padding: 15px 30px;
-            border-radius: 30px;
-            display: inline-block;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-
-        .dev-profile p {
-            margin: 5px 0;
-            color: #94a3b8;
-        }
-
-        .dev-profile strong {
-            color: white;
-            letter-spacing: 1px;
-        }
-
-        .social-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: var(--accent-color);
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .social-link:hover {
-            color: #60a5fa;
-            transform: scale(1.05);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            width: 100%;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Emon Islam</h1>
-        <div class="subtitle">"1% Better Every Day"</div>
-    </header>
-    
-    <div class="app-container">
-        <!-- Dynamic Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-bar" id="progress"></div>
-        </div>
+    <!-- Control Panel -->
+    <div class="controls">
+        <h2>🛠️ প্রোফাইল ও মেসেজ এডিট</h2>
+        
+        <label>প্রোফাইল ছবি (DP):</label>
+        <input type="file" id="dpInput" accept="image/*">
+        
+        <label>নাম / নাম্বার:</label>
+        <input type="text" id="nameInput" value="Emon Islam" oninput="updateProfile()">
+        
+        <label>স্ট্যাটাস:</label>
+        <input type="text" id="statusInput" value="online" oninput="updateProfile()">
 
-        <!-- Add Habit Input -->
-        <div class="input-group">
-            <input type="text" id="habitInput" placeholder="আজকের নতুন লক্ষ্য যোগ করুন...">
-            <button onclick="addHabit()"><i class="fas fa-plus"></i></button>
-        </div>
+        <hr style="width: 100%; border: 0.5px solid #eee;">
 
-        <!-- Habits List -->
-        <ul id="habitList">
-            <!-- Habits will be added here by JS -->
-        </ul>
+        <label>নতুন মেসেজ লিখুন:</label>
+        <input type="text" id="msgText" placeholder="Hi, how are you?">
+        <input type="time" id="msgTime" value="10:30">
+        
+        <button onclick="addMessage('received')"><i class="fas fa-arrow-down"></i> অন্যজনের মেসেজ (White)</button>
+        <button onclick="addMessage('sent')"><i class="fas fa-arrow-up"></i> আমার মেসেজ (Green)</button>
+        
+        <button class="btn-download" onclick="downloadChat()"><i class="fas fa-download"></i> ছবি হিসেবে ডাউনলোড করুন</button>
     </div>
 
-    <footer>
-        <div class="dev-profile">
-            <p>Developed with <i class="fas fa-code" style="color: var(--accent-color);"></i> by <strong>EMONXPLOIT</strong></p>
-            <!-- আপনার ফেসবুক আইডির লিংক 'href' এর ভিতরে বসিয়ে দিন -->
-            <a href="https://facebook.com/your-profile-link" target="_blank" class="social-link">
-                <i class="fab fa-facebook fa-lg"></i> Connect with Developer
-            </a>
+    <!-- WhatsApp Preview -->
+    <div class="chat-container" id="captureArea">
+        <!-- Header -->
+        <div class="chat-header">
+            <i class="fas fa-arrow-left"></i>
+            <img id="dpPreview" src="https://via.placeholder.com/40" alt="DP">
+            <div class="header-info">
+                <h3 id="displayName">Emon Islam</h3>
+                <p id="displayStatus">online</p>
+            </div>
+            <div class="header-icons">
+                <i class="fas fa-video"></i>
+                <i class="fas fa-phone"></i>
+                <i class="fas fa-ellipsis-v"></i>
+            </div>
         </div>
-    </footer>
+
+        <!-- Chat Area -->
+        <div class="chat-box" id="chatBox">
+            <div class="msg received">
+                হ্যালো! প্রজেক্টের কাজ কতদূর? <span class="time">10:00 AM</span>
+            </div>
+            <div class="msg sent">
+                প্রায় শেষের দিকে! <span class="time">10:05 AM <i class="fas fa-check-double" style="color: #4fc3f7;"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="credit">
+        Developed by <strong>EMONXPLOIT</strong>
+    </div>
 
     <script>
-        const input = document.getElementById('habitInput');
-        const list = document.getElementById('habitList');
-        const progress = document.getElementById('progress');
-        
-        // এখানে কিছু ডেমো ডেটা দেওয়া হলো
-        let habits = [
-            { text: "Python প্র্যাকটিস করা", done: false },
-            { text: "বই পড়া (১০ পৃষ্ঠা)", done: true }
-        ];
-
-        function updateProgress() {
-            if(habits.length === 0) { 
-                progress.style.width = '0%'; 
-                return; 
-            }
-            const completed = habits.filter(h => h.done).length;
-            const percent = (completed / habits.length) * 100;
-            progress.style.width = percent + '%';
+        // Update Name & Status dynamically
+        function updateProfile() {
+            document.getElementById('displayName').innerText = document.getElementById('nameInput').value;
+            document.getElementById('displayStatus').innerText = document.getElementById('statusInput').value;
         }
 
-        function render() {
-            list.innerHTML = '';
-            habits.forEach((h, i) => {
-                const li = document.createElement('li');
-                if(h.done) li.classList.add('completed');
-                
-                li.innerHTML = `
-                    <span class="habit-text" onclick="toggleHabit(${i})">
-                        <i class="${h.done ? 'fas fa-check-circle' : 'far fa-circle'}"></i> 
-                        &nbsp; ${h.text}
-                    </span>
-                    <button class="delete-btn" onclick="removeHabit(${i})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                `;
-                list.appendChild(li);
-            });
-            updateProgress();
-        }
-
-        function addHabit() {
-            const val = input.value.trim();
-            if(val === '') return;
-            habits.push({ text: val, done: false });
-            input.value = '';
-            render();
-        }
-
-        // Enter বাটন চাপলে যাতে কাজ করে
-        input.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                addHabit();
+        // Handle DP Image Upload
+        document.getElementById('dpInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('dpPreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
             }
         });
 
-        function toggleHabit(index) {
-            habits[index].done = !habits[index].done;
-            render();
+        // Format 24h time to 12h AM/PM
+        function formatAMPM(time24) {
+            let [hours, minutes] = time24.split(':');
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; 
+            return hours + ':' + minutes + ' ' + ampm;
         }
 
-        function removeHabit(index) {
-            habits.splice(index, 1);
-            render();
+        // Add Message to Chat Box
+        function addMessage(type) {
+            const text = document.getElementById('msgText').value;
+            const timeRaw = document.getElementById('msgTime').value;
+            
+            if (text.trim() === '') return;
+
+            const timeFormatted = timeRaw ? formatAMPM(timeRaw) : '';
+            const tick = type === 'sent' ? ' <i class="fas fa-check-double" style="color: #4fc3f7;"></i>' : '';
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg ${type}`;
+            msgDiv.innerHTML = `${text} <span class="time">${timeFormatted}${tick}</span>`;
+
+            const chatBox = document.getElementById('chatBox');
+            chatBox.appendChild(msgDiv);
+            
+            // Scroll to bottom
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            // Clear input
+            document.getElementById('msgText').value = '';
         }
 
-        // শুরুতে একবার লোড করার জন্য
-        render();
+        // Download Chat as Image using html2canvas
+        function downloadChat() {
+            const captureArea = document.getElementById('captureArea');
+            
+            // Temporarily hide scrollbar for a clean screenshot
+            const chatBox = document.getElementById('chatBox');
+            chatBox.style.overflow = 'hidden';
+
+            html2canvas(captureArea, {
+                scale: 2, // High resolution
+                useCORS: true,
+                backgroundColor: null
+            }).then(canvas => {
+                // Restore scrollbar
+                chatBox.style.overflow = 'auto';
+
+                // Create download link
+                const link = document.createElement('a');
+                link.download = 'MockChat_by_EMONXPLOIT.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
     </script>
 
 </body>
