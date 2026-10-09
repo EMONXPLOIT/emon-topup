@@ -3,328 +3,356 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Click-to-Edit Screenshot | EMONXPLOIT</title>
+    <title>All-in-One Fake Screenshot Editor | EMONXPLOIT</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap');
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
+            font-family: 'Roboto', sans-serif;
+            background-color: #cfd8dc;
             margin: 0;
             display: flex;
-            flex-direction: column;
-            height: 100vh;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
         }
 
-        /* Top Navigation / Toolbar */
-        .toolbar {
-            background: #1e1e1e;
-            padding: 15px 20px;
+        /* Control Panel */
+        .editor-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            width: 320px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
             display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            z-index: 10;
+            flex-direction: column;
+            gap: 12px;
+            height: fit-content;
         }
 
-        .toolbar h2 { margin: 0; font-size: 20px; color: #00e676; flex: 1; }
+        .editor-panel h3 { margin:0; text-align:center; color: #333; }
+        
+        .editor-panel input, .editor-panel button, .editor-panel select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
 
-        .btn {
-            background: #333; color: white; border: 1px solid #555;
-            padding: 8px 15px; border-radius: 5px; cursor: pointer;
-            display: flex; align-items: center; gap: 8px; font-size: 14px;
+        .editor-panel button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
             transition: 0.2s;
         }
-        .btn:hover, .btn.active { background: #00e676; color: black; border-color: #00e676; }
-        
-        .btn-download { background: #2979ff; border-color: #2979ff; }
-        .btn-download:hover { background: #1c54b2; color: white;}
+        .editor-panel button:hover { background: #1d4ed8; }
+        .btn-dl { background: #10b981 !important; margin-top: 10px;}
+        .btn-dl:hover { background: #059669 !important; }
 
-        input[type="file"] { display: none; }
-
-        /* Workspace */
-        .workspace {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: auto;
-            background: #0a0a0a;
-            padding: 20px;
+        .dev-credit {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #ccc;
         }
+        .dev-credit span { font-weight: bold; color: #2563eb; }
 
-        #editor-container {
+        /* Phone Screen Frame */
+        .phone-frame {
+            width: 390px;
+            height: 844px;
+            background: #efeae2;
             position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Base Status Bar */
+        .status-bar {
+            background: transparent;
+            color: #000;
+            padding: 5px 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 10;
+        }
+        .status-icons i { margin-left: 5px; font-size: 12px; }
+
+        /* Base Header */
+        .app-header {
             background: #ffffff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.8);
-            cursor: crosshair;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        .app-header .back-btn { font-size: 20px; margin-right: 5px; cursor: pointer; }
+        .app-header .profile-pic {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: #dfe5e7; margin-right: 10px; object-fit: cover;
+        }
+        .app-header .name-area { flex: 1; }
+        .app-header .name-area h2 { margin: 0; font-size: 18px; font-weight: 500; }
+        .app-header .header-icons { display: flex; gap: 20px; font-size: 18px; }
+
+        /* Chat Area */
+        .chat-area {
+            flex: 1; padding: 15px; overflow-y: auto; display: flex;
+            flex-direction: column; gap: 10px; z-index: 5;
         }
 
-        #bg-image {
-            display: block;
-            max-width: 100%;
-            pointer-events: none; /* Let clicks pass through to container */
+        .message {
+            max-width: 75%; padding: 8px 12px; border-radius: 12px;
+            position: relative; font-size: 15px; word-wrap: break-word;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        }
+        .message .time { font-size: 11px; float: right; margin: 10px 0 -5px 10px; opacity: 0.7;}
+
+        /* Base Input Area */
+        .input-area {
+            padding: 8px; display: flex; align-items: center; gap: 8px;
+            background: transparent; margin-bottom: 15px;
+        }
+        .input-box {
+            flex: 1; background: #ffffff; border-radius: 25px; padding: 12px 15px;
+            display: flex; align-items: center; gap: 15px; color: #8696a0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
-        /* Hidden canvas for color picking */
-        #color-canvas { display: none; }
+        /* =========================================
+           THEMES (Platform Specific CSS)
+           ========================================= */
 
-        /* Smart Text Input */
-        .smart-text {
-            position: absolute;
-            min-width: 50px;
-            min-height: 20px;
-            padding: 2px 5px;
-            outline: none;
-            border: 1px dashed #00e676;
-            font-family: sans-serif;
-            font-size: 16px;
-            color: #000000;
-            white-space: pre-wrap;
-            z-index: 20;
-            /* Resizable by user */
-            resize: both;
-            overflow: hidden;
-        }
-        .smart-text:focus { border: 2px solid #2979ff; }
+        /* 1. WhatsApp Theme (Default) */
+        .theme-wa { background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-size: cover; }
+        .theme-wa .app-header { background: #fff; color: #111b21; }
+        .theme-wa .status-bar { background: #fff; color: #000; }
+        .theme-wa .msg-sent { background: #e7ffdb; color: #111b21; border-top-right-radius: 0; }
+        .theme-wa .msg-recv { background: #ffffff; color: #111b21; border-top-left-radius: 0; }
+        .theme-wa .mic-btn { width: 48px; height: 48px; background: #00a884; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; }
 
-        /* Draggable Profile Image */
-        .smart-image {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            cursor: move;
-            border: 2px dashed #ff9100;
-            z-index: 20;
-            resize: both;
-            overflow: hidden;
-        }
+        /* 2. Messenger Theme */
+        .theme-ms { background: #ffffff; }
+        .theme-ms .app-header { background: #ffffff; color: #000; box-shadow: 0 1px 5px rgba(0,0,0,0.1); }
+        .theme-ms .status-bar { background: #ffffff; color: #000; }
+        .theme-ms .header-icons { color: #0084ff; }
+        .theme-ms .msg-sent { background: #0084ff; color: #ffffff; border-radius: 18px; border-bottom-right-radius: 4px; box-shadow: none;}
+        .theme-ms .msg-recv { background: #e4e6eb; color: #050505; border-radius: 18px; border-bottom-left-radius: 4px; box-shadow: none;}
+        .theme-ms .input-box { background: #f0f2f5; border-radius: 20px; box-shadow: none; color: #65676b; }
+        .theme-ms .mic-btn { color: #0084ff; background: transparent; font-size: 24px; box-shadow: none;}
+
+        /* 3. Telegram Theme */
+        .theme-tg { background: #e1ebf2; background-image: url('https://i.ibb.co/L50H0Qc/tg-bg.png'); background-size: cover;}
+        .theme-tg .app-header { background: #517da2; color: #ffffff; }
+        .theme-tg .status-bar { background: #466c8d; color: #ffffff; }
+        .theme-tg .msg-sent { background: #effdde; color: #000; border-radius: 12px; border-bottom-right-radius: 0; }
+        .theme-tg .msg-recv { background: #ffffff; color: #000; border-radius: 12px; border-bottom-left-radius: 0; }
+        .theme-tg .input-area { background: #ffffff; margin: 0; padding: 10px; }
+        .theme-tg .input-box { border-radius: 0; box-shadow: none; padding: 5px; }
+        .theme-tg .mic-btn { color: #8797a4; background: transparent; font-size: 24px; box-shadow: none;}
+
+        /* 4. Imo Theme */
+        .theme-imo { background: #f0f2f5; }
+        .theme-imo .app-header { background: #ffffff; color: #333; border-bottom: 2px solid #e0e0e0; box-shadow: none;}
+        .theme-imo .status-bar { background: #ffffff; color: #000; }
+        .theme-imo .header-icons { color: #1e88e5; }
+        .theme-imo .msg-sent { background: #e3f2fd; color: #000; border-radius: 15px; border-bottom-right-radius: 0; border: 1px solid #bbdefb;}
+        .theme-imo .msg-recv { background: #ffffff; color: #000; border-radius: 15px; border-bottom-left-radius: 0; border: 1px solid #e0e0e0;}
+        .theme-imo .input-area { background: #fff; margin: 0; border-top: 1px solid #e0e0e0; }
+        .theme-imo .input-box { box-shadow: none; border-radius: 10px; background: #f9f9f9; border: 1px solid #eee;}
+        .theme-imo .mic-btn { width: 40px; height: 40px; background: #1e88e5; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; }
+
     </style>
 </head>
 <body>
 
-    <div class="toolbar">
-        <h2><i class="fas fa-magic"></i> Smart Click-to-Edit</h2>
+    <!-- Control Panel -->
+    <div class="editor-panel">
+        <h3>Multi-Platform Editor</h3>
         
-        <label for="uploadImg" class="btn">
-            <i class="fas fa-upload"></i> ১. স্ক্রিনশট আপলোড
-        </label>
-        <input type="file" id="uploadImg" accept="image/*">
+        <label>অ্যাপ সিলেক্ট করুন (Platform):</label>
+        <select id="platformSelect" onchange="changeTheme()">
+            <option value="theme-wa">WhatsApp</option>
+            <option value="theme-ms">Messenger</option>
+            <option value="theme-tg">Telegram</option>
+            <option value="theme-imo">Imo</option>
+        </select>
 
-        <div style="width: 2px; height: 30px; background: #555; margin: 0 10px;"></div>
-
-        <button class="btn active" id="textModeBtn" onclick="setMode('text')">
-            <i class="fas fa-font"></i> ২. লেখা এডিট (Text)
-        </button>
+        <hr style="width:100%; border:0.5px solid #eee;">
         
-        <button class="btn" id="imageModeBtn" onclick="setMode('image')">
-            <i class="fas fa-user-circle"></i> ৩. প্রোফাইল ছবি এডিট (DP)
-        </button>
+        <div style="display:flex; gap:10px;">
+            <div style="flex:1;">
+                <label>Time:</label>
+                <input type="text" id="sysTime" value="8:35 PM" oninput="updateUI()">
+            </div>
+            <div style="flex:1;">
+                <label>Battery %:</label>
+                <input type="text" id="sysBat" value="8" oninput="updateUI()">
+            </div>
+        </div>
 
-        <!-- Hidden input for profile picture -->
-        <input type="file" id="uploadDp" accept="image/*">
+        <label>Profile Name:</label>
+        <input type="text" id="profName" value="Emon Islam" oninput="updateUI()">
 
-        <div style="width: 2px; height: 30px; background: #555; margin: 0 10px;"></div>
+        <label>Profile Picture:</label>
+        <input type="file" id="profPicInput" accept="image/*">
 
-        <button class="btn btn-download" onclick="downloadSS()">
-            <i class="fas fa-download"></i> সেভ করুন
-        </button>
-    </div>
+        <hr style="width:100%; border:0.5px solid #eee;">
+        
+        <label>Add Message:</label>
+        <input type="text" id="newMsg" placeholder="Type your message...">
+        <input type="text" id="msgTime" placeholder="Time (e.g. 8:36 PM)">
+        
+        <div style="display:flex; gap:5px;">
+            <button style="flex:1; background:#f1f5f9; color:black; border:1px solid #cbd5e1;" onclick="addMsg('recv')">Received</button>
+            <button style="flex:1;" onclick="addMsg('sent')">Sent</button>
+        </div>
 
-    <div class="workspace">
-        <div id="editor-container">
-            <img id="bg-image" src="" alt="Upload a screenshot first">
-            <canvas id="color-canvas"></canvas>
-            <!-- Injected texts and images will go here -->
+        <button class="btn-dl" onclick="downloadSS()"><i class="fas fa-download"></i> Download Screenshot</button>
+
+        <div class="dev-credit">
+            Developed by <br> <span>Emon Islam (EMONXPLOIT)</span>
         </div>
     </div>
 
-    <script>
-        const editorContainer = document.getElementById('editor-container');
-        const bgImage = document.getElementById('bg-image');
-        const colorCanvas = document.getElementById('color-canvas');
-        const ctx = colorCanvas.getContext('2d', { willReadFrequently: true });
-        const dpInput = document.getElementById('uploadDp');
+    <!-- Phone UI Preview -->
+    <div class="phone-frame theme-wa" id="ss-capture">
         
-        let currentMode = 'text'; // Can be 'text' or 'image'
-        let clickPosition = { x: 0, y: 0 };
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span id="ui-time">8:35 PM</span>
+            <div class="status-icons">
+                <span style="margin-left: 20px;">
+                    <i class="fas fa-signal"></i>
+                    <i class="fas fa-wifi"></i>
+                    <i class="fas fa-battery-quarter"></i> <span id="ui-bat">8</span>
+                </span>
+            </div>
+        </div>
 
-        // Switch Modes
-        function setMode(mode) {
-            currentMode = mode;
-            document.getElementById('textModeBtn').classList.remove('active');
-            document.getElementById('imageModeBtn').classList.remove('active');
+        <!-- App Header -->
+        <div class="app-header">
+            <i class="fas fa-arrow-left back-btn"></i>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png" id="ui-dp" class="profile-pic">
+            <div class="name-area">
+                <h2 id="ui-name">Emon Islam</h2>
+            </div>
+            <div class="header-icons">
+                <i class="fas fa-phone-alt"></i>
+                <i class="fas fa-video"></i>
+                <i class="fas fa-info-circle"></i>
+            </div>
+        </div>
+
+        <!-- Chat Body -->
+        <div class="chat-area" id="chatBody">
+            <div class="message msg-recv">
+                Hey, check out this new editor! <span class="time">8:30 PM</span>
+            </div>
+            <div class="message msg-sent">
+                It looks amazing, exactly like the real app. <span class="time">8:35 PM <i class="fas fa-check-double" style="color:#38bdf8;"></i></span>
+            </div>
+        </div>
+
+        <!-- Bottom Input -->
+        <div class="input-area">
+            <div class="input-box">
+                <i class="far fa-smile" style="font-size:22px;"></i>
+                <span style="flex:1; display:flex; align-items:center;">Message...</span>
+                <i class="fas fa-paperclip" style="font-size:20px;"></i>
+            </div>
+            <div class="mic-btn">
+                <i class="fas fa-microphone"></i>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Change Theme Dynamically
+        function changeTheme() {
+            const platform = document.getElementById('platformSelect').value;
+            const phoneFrame = document.getElementById('ss-capture');
             
-            if(mode === 'text') document.getElementById('textModeBtn').classList.add('active');
-            if(mode === 'image') document.getElementById('imageModeBtn').classList.add('active');
+            // Remove all themes
+            phoneFrame.classList.remove('theme-wa', 'theme-ms', 'theme-tg', 'theme-imo');
+            
+            // Add selected theme
+            phoneFrame.classList.add(platform);
         }
 
-        // Upload Screenshot & Setup Color Picker Canvas
-        document.getElementById('uploadImg').addEventListener('change', function(e) {
-            const file = e.target.files[0];
+        // Update basic info in real-time
+        function updateUI() {
+            document.getElementById('ui-time').innerText = document.getElementById('sysTime').value;
+            document.getElementById('ui-bat').innerText = document.getElementById('sysBat').value;
+            document.getElementById('ui-name').innerText = document.getElementById('profName').value;
+        }
+
+        // Profile Picture Upload
+        document.getElementById('profPicInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
-                    const img = new Image();
-                    img.onload = function() {
-                        bgImage.src = img.src;
-                        
-                        // Setup hidden canvas for exact color picking
-                        colorCanvas.width = img.width;
-                        colorCanvas.height = img.height;
-                        ctx.drawImage(img, 0, 0);
-                        
-                        // Clear old edits
-                        document.querySelectorAll('.smart-text, .smart-image').forEach(el => el.remove());
-                    }
-                    img.src = event.target.result;
+                reader.onload = function(e) {
+                    document.getElementById('ui-dp').src = e.target.result;
                 }
                 reader.readAsDataURL(file);
             }
         });
 
-        // Handle Click on the Image
-        editorContainer.addEventListener('click', function(e) {
-            if (e.target !== editorContainer && e.target !== bgImage) return; // Prevent clicking on existing inputs
-            if (!bgImage.src || bgImage.src === window.location.href) {
-                alert("প্রথমে একটি স্ক্রিনশট আপলোড করুন!"); return;
-            }
+        // Add Chat Messages
+        function addMsg(type) {
+            const text = document.getElementById('newMsg').value;
+            const time = document.getElementById('msgTime').value;
+            if(!text) return;
 
-            const rect = editorContainer.getBoundingClientRect();
-            const scaleX = colorCanvas.width / rect.width;
-            const scaleY = colorCanvas.height / rect.height;
-
-            const clickX = e.clientX - rect.left;
-            const clickY = e.clientY - rect.top;
-
-            clickPosition = { x: clickX, y: clickY };
-
-            if (currentMode === 'text') {
-                // Get pixel color to cover old text automatically
-                const realX = Math.floor(clickX * scaleX);
-                const realY = Math.floor(clickY * scaleY);
-                const pixel = ctx.getImageData(realX, realY, 1, 1).data;
-                const bgColor = `rgba(${pixel[0]}, ${pixel[1]}, ${pixel[2]}, ${pixel[3] / 255})`;
-
-                // Determine text color based on background brightness
-                const brightness = Math.round(((parseInt(pixel[0]) * 299) + (parseInt(pixel[1]) * 587) + (parseInt(pixel[2]) * 114)) / 1000);
-                const textColor = (brightness > 125) ? 'black' : 'white';
-
-                createTextElement(clickX, clickY, bgColor, textColor);
-            } else if (currentMode === 'image') {
-                dpInput.click(); // Open file browser for new DP
-            }
-        });
-
-        // Create Smart Text Box
-        function createTextElement(x, y, bgColor, textColor) {
-            const textDiv = document.createElement('div');
-            textDiv.className = 'smart-text';
-            textDiv.contentEditable = true;
-            textDiv.innerText = "লিখুন...";
-            textDiv.style.left = (x - 5) + 'px'; // Center slightly
-            textDiv.style.top = (y - 10) + 'px';
-            textDiv.style.backgroundColor = bgColor; // Auto covers old text
-            textDiv.style.color = textColor;
-
-            editorContainer.appendChild(textDiv);
+            const msgDiv = document.createElement('div');
+            msgDiv.className = type === 'sent' ? 'message msg-sent' : 'message msg-recv';
             
-            // Auto focus so keyboard pops up (on mobile) or cursor appears
-            setTimeout(() => textDiv.focus(), 50);
-
-            // Double click to delete
-            textDiv.addEventListener('dblclick', () => textDiv.remove());
+            let tick = '';
+            // Only add tick if it's sent and it's WA or TG style (simplified)
+            if (type === 'sent') {
+                tick = '<i class="fas fa-check-double" style="color:#38bdf8; margin-left:4px;"></i>';
+            }
             
-            makeDraggable(textDiv);
+            msgDiv.innerHTML = `${text} <span class="time">${time} ${tick}</span>`;
+
+            document.getElementById('chatBody').appendChild(msgDiv);
+            document.getElementById('newMsg').value = '';
+            
+            // Scroll to bottom
+            const chatBody = document.getElementById('chatBody');
+            chatBody.scrollTop = chatBody.scrollHeight;
         }
 
-        // Profile DP Upload Logic
-        dpInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    createImageElement(clickPosition.x, clickPosition.y, event.target.result);
-                }
-                reader.readAsDataURL(file);
-            }
-            dpInput.value = ''; // Reset input
-        });
-
-        // Create Smart Image Box
-        function createImageElement(x, y, src) {
-            const img = document.createElement('img');
-            img.src = src;
-            img.className = 'smart-image';
-            img.style.left = (x - 25) + 'px'; // Center based on default 50px width
-            img.style.top = (y - 25) + 'px';
-
-            editorContainer.appendChild(img);
-            
-            // Double click to delete
-            img.addEventListener('dblclick', () => img.remove());
-            
-            makeDraggable(img);
-        }
-
-        // Simple Dragging Logic for elements
-        function makeDraggable(el) {
-            let isDragging = false, startX, startY;
-            
-            el.addEventListener('mousedown', (e) => {
-                if(e.target === el && !el.matches(':focus')) {
-                    isDragging = true;
-                    startX = e.clientX - el.offsetLeft;
-                    startY = e.clientY - el.offsetTop;
-                }
-            });
-            document.addEventListener('mouseup', () => isDragging = false);
-            document.addEventListener('mousemove', (e) => {
-                if (isDragging) {
-                    el.style.left = (e.clientX - startX) + 'px';
-                    el.style.top = (e.clientY - startY) + 'px';
-                }
-            });
-        }
-
-        // Download Final Image
+        // Download High-Quality Screenshot
         function downloadSS() {
-            if (!bgImage.src || bgImage.src === window.location.href) {
-                alert("ডাউনলোড করার আগে স্ক্রিনশট আপলোড করুন!"); return;
-            }
-
-            // Remove dashed borders before screenshot
-            document.querySelectorAll('.smart-text').forEach(e => {
-                e.style.border = 'none';
-                e.style.resize = 'none'; // Hide resize handle
-            });
-            document.querySelectorAll('.smart-image').forEach(e => {
-                e.style.border = 'none';
-                e.style.resize = 'none';
-            });
-
-            html2canvas(editorContainer, {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: null
+            const element = document.getElementById('ss-capture');
+            
+            html2canvas(element, {
+                scale: 3, 
+                useCORS: true
             }).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'Smart_Edited_Screenshot.jpg';
-                link.href = canvas.toDataURL('image/jpeg', 0.95);
+                link.download = 'MockChat_By_EMONXPLOIT.jpg';
+                link.href = canvas.toDataURL('image/jpeg', 0.9);
                 link.click();
-                
-                // Restore borders for further editing
-                document.querySelectorAll('.smart-text').forEach(e => {
-                    e.style.border = '1px dashed #00e676';
-                    e.style.resize = 'both';
-                });
-                document.querySelectorAll('.smart-image').forEach(e => {
-                    e.style.border = '2px dashed #ff9100';
-                    e.style.resize = 'both';
-                });
             });
         }
     </script>
